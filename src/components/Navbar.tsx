@@ -13,7 +13,7 @@ interface LinspoNavBarProps {
 export default function LinspoNavBar({
   brandName = "Linspo UI",
   ctaText = "Star on GitHub",
-  ctaHref = "https://github.com/<your-repo>",
+  ctaHref = "https://github.com/jchiwaii/Linspo-UI",
   className = "",
 }: LinspoNavBarProps) {
   return (
