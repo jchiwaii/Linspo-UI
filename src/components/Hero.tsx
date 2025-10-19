@@ -19,7 +19,7 @@ interface DataDashboardHeroProps {
 }
 
 export default function DataDashboardHero({
-  subtitle = "Create stunning, interactive charts and dashboards with our modern React components. Built for data wizards who care about design too.",
+  subtitle = "A collection of reusable components for building data-driven web applications. Includes charts, data tables, filters, summary cards, and analytics dashboard elements built with React and Tailwind CSS.",
   primaryCTA = {
     text: "Browse Components",
     href: "/components",
@@ -28,7 +28,7 @@ export default function DataDashboardHero({
     text: "View Documentation",
     href: "#docs",
   },
-  badgeText = "Linspo UI v1.0",
+  badgeText = "Linspo UI v0.1",
   className = "",
 }: DataDashboardHeroProps) {
   // Centered hero over a subtle, dimmed rotating globe background
@@ -58,11 +58,11 @@ export default function DataDashboardHero({
               {/* Main heading */}
               <h1 className="text-5xl md:text-6xl font-semibold tracking-tight mb-6">
                 <span className="bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
-                  Beautiful Data Visualization
+                  Data Visualization Components
                 </span>
                 <br />
                 <span className="bg-gradient-to-b from-gray-400 to-gray-600 bg-clip-text text-transparent font-light">
-                  Made Simple
+                  for Data-Driven Apps
                 </span>
               </h1>
 

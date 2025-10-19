@@ -25,84 +25,131 @@ interface ComponentItem {
 
 const components: ComponentItem[] = [
   {
-    id: "navbar",
-    title: "Navigation Bar",
-    description:
-      "Clean navbar with smooth animations, mobile menu, and modern design.",
-    category: "Navigation",
-    icon: <Layout size={20} />,
-    tags: ["Navigation", "Glass", "Responsive", "Menu"],
-    href: "/components/navbar",
-  },
-  {
     id: "key-metrics",
     title: "Key Metrics",
     description:
       "Display important statistics and KPIs with animated counters and visual indicators.",
-    category: "Analytics",
+    category: "Dashboard Elements",
     icon: <BarChart3 size={20} />,
-    tags: ["Dashboard", "Stats", "Animation"],
+    tags: ["Dashboard", "Stats", "KPIs"],
     href: "/components/key-metrics",
   },
   {
-    id: "logo-scrolling",
-    title: "Logo Scrolling",
+    id: "line-chart",
+    title: "Line Chart",
     description:
-      "Infinite scrolling logo carousel perfect for showcasing partners or clients.",
-    category: "Marketing",
-    icon: <Zap size={20} />,
-    tags: ["Carousel", "Infinite Scroll", "Branding"],
-    href: "/components/logo-scrolling",
+      "Responsive line charts for time-series data and trend visualization.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Time Series", "Trends"],
+    href: "/components/line-chart",
   },
   {
-    id: "hero-section",
-    title: "Hero Section",
+    id: "bar-chart",
+    title: "Bar Chart",
     description:
-      "Modern hero sections with gradients, animations, and call-to-action buttons.",
-    category: "Layout",
-    icon: <Layout size={20} />,
-    tags: ["Hero", "Landing", "CTA"],
-    href: "/components/hero-section",
+      "Vertical and horizontal bar charts for comparing categorical data.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Comparison", "Categories"],
+    href: "/components/bar-chart",
   },
   {
-    id: "interactive-cards",
-    title: "Interactive Cards",
+    id: "column-chart",
+    title: "Column Chart",
     description:
-      "Hover effects, micro-animations, and engaging card components.",
-    category: "UI Elements",
-    icon: <MousePointer size={20} />,
-    tags: ["Cards", "Hover", "Interactive"],
-    href: "/components/interactive-cards",
+      "Vertical column charts ideal for comparing values across categories.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Comparison", "Data"],
+    href: "/components/column-chart",
+  },
+  {
+    id: "area-chart",
+    title: "Area Chart",
+    description:
+      "Area charts for visualizing volume and cumulative trends over time.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Trends", "Volume"],
+    href: "/components/area-chart",
+  },
+  {
+    id: "pie-chart",
+    title: "Pie Chart",
+    description:
+      "Circular charts showing proportional data and percentage breakdowns.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Proportions", "Percentages"],
+    href: "/components/pie-chart",
+  },
+  {
+    id: "donut-chart",
+    title: "Donut Chart",
+    description:
+      "Ring-style charts for displaying hierarchical and proportional data.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Proportions", "Data"],
+    href: "/components/donut-chart",
+  },
+  {
+    id: "scatter-plot",
+    title: "Scatter Plot",
+    description:
+      "Scatter plots for correlation analysis and distribution patterns.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Correlation", "Distribution"],
+    href: "/components/scatter-plot",
+  },
+  {
+    id: "heatmap",
+    title: "Heatmap",
+    description:
+      "Color-coded matrix visualization for patterns and data density.",
+    category: "Charts",
+    icon: <BarChart3 size={20} />,
+    tags: ["Charts", "Patterns", "Density"],
+    href: "/components/heatmap",
+  },
+  {
+    id: "gauge-chart",
+    title: "Gauge Chart",
+    description:
+      "Progress and performance indicators with customizable ranges.",
+    category: "Dashboard Elements",
+    icon: <BarChart3 size={20} />,
+    tags: ["Dashboard", "Progress", "Metrics"],
+    href: "/components/gauge-chart",
   },
   {
     id: "data-visualization",
-    title: "Data Visualization",
+    title: "Data Tables",
     description:
-      "Charts, graphs, and data display components with smooth animations.",
-    category: "Analytics",
+      "Interactive data tables with sorting, filtering, and pagination.",
+    category: "Tables",
     icon: <Eye size={20} />,
-    tags: ["Charts", "Data", "Visualization"],
+    tags: ["Tables", "Data", "Interactive"],
     href: "/components/data-visualization",
   },
   {
     id: "calendar-widget",
     title: "Calendar Widget",
-    description: "Clean and minimal calendar component with event management.",
-    category: "Widgets",
+    description: "Date-based data visualization and event timeline component.",
+    category: "Dashboard Elements",
     icon: <Calendar size={20} />,
-    tags: ["Calendar", "Events", "Widget"],
+    tags: ["Calendar", "Timeline", "Events"],
     href: "/components/calendar-widget",
   },
 ];
 
 const categories = [
   "All",
-  "Navigation",
-  "Analytics",
-  "Marketing",
-  "Layout",
-  "UI Elements",
-  "Widgets",
+  "Charts",
+  "Dashboard Elements",
+  "Tables",
 ];
 
 export default function ComponentsPage() {
@@ -126,16 +173,15 @@ export default function ComponentsPage() {
             <div className="text-center mb-16">
               <h1 className="text-5xl md:text-6xl font-light tracking-tight mb-6">
                 <span className="bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
-                  Component
+                  Data Visualization
                 </span>
                 <br />
                 <span className="bg-gradient-to-b from-gray-400 to-gray-600 bg-clip-text text-transparent font-extralight">
-                  Collection
+                  Components
                 </span>
               </h1>
               <p className="text-gray-400 text-lg max-w-2xl mx-auto leading-relaxed">
-                Explore our carefully crafted components. Each one is built for
-                reusability, performance, and modern design standards.
+                Explore our collection of data visualization components. Charts, tables, and dashboard elements designed for data-driven applications.
               </p>
             </div>
 

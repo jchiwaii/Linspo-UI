@@ -1,10 +1,10 @@
 {
   "name": "linspo-ui",
   "version": "0.1.0",
-  "description": "Linspo UI — open-source, elegant web visualization components for dashboards and data apps.",
+  "description": "Linspo UI — open-source React component library for data-driven applications. Includes charts, tables, filters, and analytics dashboard components built with Tailwind CSS.",
   "repository": {
     "type": "git",
-    "url": "https://github.com/<your-username>/linspo-ui"
+    "url": "https://github.com/jchiwaii/Linspo-UI"
   },
   "private": true,
   "scripts": {
