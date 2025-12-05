@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { Activity, TrendingUp } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity } from "lucide-react";
+import ComponentPage from "./ComponentPage";
 
 interface DataPoint {
   label: string;
   value: number;
-  color?: string;
 }
 
 interface AreaChartProps {
@@ -14,219 +14,148 @@ interface AreaChartProps {
   title?: string;
   subtitle?: string;
   metric?: string;
+  currentValue?: string | number;
   change?: number;
   changeType?: "increase" | "decrease" | "neutral";
-  className?: string;
 }
 
 const defaultData: DataPoint[] = [
-  { label: "Jan", value: 45 },
-  { label: "Feb", value: 52 },
-  { label: "Mar", value: 48 },
-  { label: "Apr", value: 61 },
-  { label: "May", value: 55 },
-  { label: "Jun", value: 67 },
-  { label: "Jul", value: 73 },
-  { label: "Aug", value: 69 },
-  { label: "Sep", value: 78 },
-  { label: "Oct", value: 82 },
+  { label: "Jan", value: 2400 },
+  { label: "Feb", value: 1398 },
+  { label: "Mar", value: 9800 },
+  { label: "Apr", value: 3908 },
+  { label: "May", value: 4800 },
+  { label: "Jun", value: 3800 },
+  { label: "Jul", value: 4300 },
+  { label: "Aug", value: 5200 },
 ];
 
 export default function AreaChart({
   data = defaultData,
-  title = "Area Chart Component",
-  subtitle = "Filled area charts perfect for showing cumulative data over time",
-  metric = "Cumulative Growth",
-  change = 18.5,
+  title = "Area Chart",
+  subtitle = "Area charts for visualizing volume and cumulative trends over time with smooth gradient fills.",
+  metric = "Total Volume",
+  currentValue,
+  change = 15.3,
   changeType = "increase",
-  className = "",
 }: AreaChartProps) {
-  const [animatedValues, setAnimatedValues] = useState<{
-    [key: string]: number;
-  }>({});
+  const [animatedValues, setAnimatedValues] = useState<{ [key: string]: number }>({});
+  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
   useEffect(() => {
     const timer = setTimeout(() => {
       const newValues: { [key: string]: number } = {};
-      data.forEach((point, index) => {
-        newValues[index] = point.value;
+      data.forEach((_, index) => {
+        newValues[index] = data[index].value;
       });
       setAnimatedValues(newValues);
-    }, 500);
+    }, 300);
     return () => clearTimeout(timer);
   }, [data]);
 
   const maxValue = Math.max(...data.map((d) => d.value));
   const minValue = Math.min(...data.map((d) => d.value));
-  const range = maxValue - minValue;
+  const range = maxValue - minValue || 1;
+  const padding = range * 0.1;
 
-  const points = data
-    .map((point, index) => {
-      const x = (index / (data.length - 1)) * 100;
-      const normalizedValue =
-        range > 0
-          ? ((animatedValues[index] || minValue) - minValue) / range
-          : 0.5;
-      const y = 100 - (normalizedValue * 70 + 15);
-      return `${x},${y}`;
-    })
-    .join(" ");
+  const getY = (value: number) => {
+    return 100 - ((value - minValue + padding) / (range + padding * 2)) * 100;
+  };
+
+  const points = data.map((_, index) => {
+    const x = (index / (data.length - 1)) * 100;
+    const y = getY(animatedValues[index] ?? minValue);
+    return `${x},${y}`;
+  }).join(" ");
 
   const areaPoints = `0,100 ${points} 100,100`;
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+  const displayValue = currentValue ?? total.toLocaleString();
 
   return (
-    <section
-      className={`relative bg-gradient-to-br from-slate-50 via-white to-slate-50 py-24 ${className}`}
-    >
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(0,0,0,0.03)_1px,transparent_1px)] bg-[size:40px_40px] opacity-40"></div>
-
-      <div className="relative max-w-4xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h2 className="text-4xl md:text-5xl font-light tracking-tight mb-4 text-slate-900">
-            {title}
-          </h2>
-          <p className="text-slate-600 text-lg max-w-2xl mx-auto leading-relaxed">
-            {subtitle}
-          </p>
+    <ComponentPage title={title} subtitle={subtitle}>
+      <div className="bg-card border border-border rounded-xl p-6 shadow-sm">
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-chart-2/10 flex items-center justify-center">
+              <Activity size={20} className="text-chart-2" />
+            </div>
+            <div>
+              <h3 className="font-semibold text-foreground">{metric}</h3>
+              <p className="text-sm text-muted-foreground">Last {data.length} months</p>
+            </div>
+          </div>
+          <div className="text-right">
+            <p className="text-2xl font-semibold data-value text-foreground">{displayValue}</p>
+            {change !== undefined && (
+              <div className={`flex items-center justify-end gap-1 text-sm font-medium ${changeType === "increase" ? "text-chart-2" : changeType === "decrease" ? "text-destructive" : "text-muted-foreground"}`}>
+                {changeType === "increase" ? <TrendingUp size={14} /> : changeType === "decrease" ? <TrendingDown size={14} /> : null}
+                <span>{change > 0 ? "+" : ""}{change}%</span>
+              </div>
+            )}
+          </div>
         </div>
 
-        <div className="bg-white/80 backdrop-blur-sm border border-slate-200/60 rounded-2xl p-8 hover:bg-white hover:border-slate-300/60 hover:shadow-2xl transition-all duration-500">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-2">
-              <Activity size={24} className="text-slate-700" />
-              <h3 className="text-xl font-semibold text-slate-900">{metric}</h3>
-            </div>
-            <div className="text-right">
-              <div className="text-3xl font-light text-slate-900">
-                {data[data.length - 1]?.value}
-              </div>
-              {change !== undefined && (
-                <div
-                  className={`text-sm font-medium flex items-center justify-end space-x-1 ${
-                    changeType === "increase"
-                      ? "text-emerald-600"
-                      : changeType === "decrease"
-                      ? "text-red-600"
-                      : "text-slate-600"
-                  }`}
-                >
-                  <TrendingUp
-                    size={16}
-                    className={changeType === "decrease" ? "rotate-180" : ""}
-                  />
-                  <span>
-                    {change > 0 ? "+" : ""}
-                    {change}%
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="relative h-80">
-            <svg
-              className="w-full h-full"
-              viewBox="0 0 100 100"
-              preserveAspectRatio="none"
-            >
-              <defs>
-                <linearGradient
-                  id="areaGradient"
-                  x1="0%"
-                  y1="0%"
-                  x2="0%"
-                  y2="100%"
-                >
-                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.8" />
-                  <stop offset="50%" stopColor="#3b82f6" stopOpacity="0.4" />
-                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.1" />
-                </linearGradient>
-                <pattern
-                  id="areaGrid"
-                  width="10"
-                  height="10"
-                  patternUnits="userSpaceOnUse"
-                >
-                  <path
-                    d="M 10 0 L 0 0 0 10"
-                    fill="none"
-                    stroke="#f1f5f9"
-                    strokeWidth="0.5"
-                  />
-                </pattern>
-              </defs>
-
-              <rect width="100" height="100" fill="url(#areaGrid)" />
-
-              <polygon
-                fill="url(#areaGradient)"
-                points={areaPoints}
-                className="transition-all duration-1500 ease-out"
-              />
-
-              <polyline
-                fill="none"
-                stroke="#3b82f6"
-                strokeWidth="2"
-                points={points}
-                className="transition-all duration-1500 ease-out"
-              />
-
-              {data.map((point, index) => {
-                const x = (index / (data.length - 1)) * 100;
-                const normalizedValue =
-                  range > 0
-                    ? ((animatedValues[index] || minValue) - minValue) / range
-                    : 0.5;
-                const y = 100 - (normalizedValue * 70 + 15);
-                return (
-                  <circle
-                    key={index}
-                    cx={x}
-                    cy={y}
-                    r="3"
-                    fill="#3b82f6"
-                    stroke="white"
-                    strokeWidth="2"
-                    className="transition-all duration-1500 ease-out hover:r-5 cursor-pointer"
-                  />
-                );
-              })}
-            </svg>
-
-            <div className="absolute -bottom-8 left-0 right-0 flex justify-between text-sm text-slate-500">
-              {data.map((point, index) => (
-                <span key={index} className="text-center">
-                  {point.label}
-                </span>
+        <div className="relative h-64 mt-4">
+          <svg className="w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+            <g className="text-border">
+              {[0, 25, 50, 75, 100].map((y) => (
+                <line key={y} x1="0" y1={y} x2="100" y2={y} stroke="currentColor" strokeWidth="0.3" strokeDasharray="2,2" />
               ))}
-            </div>
-          </div>
+            </g>
 
-          <div className="mt-12 grid grid-cols-3 gap-6 pt-6 border-t border-slate-200">
-            <div className="text-center">
-              <div className="text-2xl font-light text-slate-900">
-                {maxValue}
-              </div>
-              <div className="text-sm text-slate-600">Peak</div>
+            <defs>
+              <linearGradient id="areaChartGradient" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stopColor="hsl(160 60% 45%)" stopOpacity="0.4" />
+                <stop offset="100%" stopColor="hsl(160 60% 45%)" stopOpacity="0" />
+              </linearGradient>
+            </defs>
+
+            <polygon fill="url(#areaChartGradient)" points={areaPoints} className="transition-all duration-700 ease-out" />
+            <polyline fill="none" stroke="hsl(160 60% 45%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" points={points} className="transition-all duration-700 ease-out" />
+
+            {data.map((_, index) => {
+              const x = (index / (data.length - 1)) * 100;
+              const y = getY(animatedValues[index] ?? minValue);
+              const isHovered = hoveredPoint === index;
+
+              return (
+                <g key={index}>
+                  <rect x={x - 5} y={0} width={10} height={100} fill="transparent" onMouseEnter={() => setHoveredPoint(index)} onMouseLeave={() => setHoveredPoint(null)} className="cursor-pointer" />
+                  {isHovered && <line x1={x} y1={0} x2={x} y2={100} stroke="hsl(160 60% 45%)" strokeWidth="0.5" strokeDasharray="2,2" />}
+                  <circle cx={x} cy={y} r={isHovered ? "4" : "3"} fill="hsl(160 60% 45%)" stroke="hsl(var(--background))" strokeWidth="2" className="transition-all duration-200" />
+                </g>
+              );
+            })}
+          </svg>
+
+          {hoveredPoint !== null && (
+            <div className="absolute pointer-events-none bg-popover text-popover-foreground border border-border rounded-lg shadow-lg px-3 py-2 text-sm z-10" style={{ left: `${(hoveredPoint / (data.length - 1)) * 100}%`, top: `${getY(animatedValues[hoveredPoint] ?? minValue)}%`, transform: "translate(-50%, -120%)" }}>
+              <p className="font-medium">{data[hoveredPoint].label}</p>
+              <p className="data-value text-chart-2">{data[hoveredPoint].value.toLocaleString()}</p>
             </div>
-            <div className="text-center">
-              <div className="text-2xl font-light text-slate-900">
-                {Math.round(
-                  data.reduce((sum, d) => sum + d.value, 0) / data.length
-                )}
-              </div>
-              <div className="text-sm text-slate-600">Average</div>
-            </div>
-            <div className="text-center">
-              <div className="text-2xl font-light text-slate-900">
-                {data.reduce((sum, d) => sum + d.value, 0)}
-              </div>
-              <div className="text-sm text-slate-600">Total</div>
-            </div>
+          )}
+
+          <div className="absolute -bottom-8 left-0 right-0 flex justify-between text-xs text-muted-foreground">
+            {data.map((point, index) => (<span key={index}>{point.label}</span>))}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-3 gap-4 mt-12 pt-6 border-t border-border">
+          <div className="text-center">
+            <p className="text-xl font-semibold data-value text-foreground">{maxValue.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Peak</p>
+          </div>
+          <div className="text-center">
+            <p className="text-xl font-semibold data-value text-foreground">{Math.round(total / data.length).toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Average</p>
+          </div>
+          <div className="text-center">
+            <p className="text-xl font-semibold data-value text-foreground">{minValue.toLocaleString()}</p>
+            <p className="text-sm text-muted-foreground">Minimum</p>
           </div>
         </div>
       </div>
-    </section>
+    </ComponentPage>
   );
 }

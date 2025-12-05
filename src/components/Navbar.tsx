@@ -1,49 +1,79 @@
 "use client";
 
-import React from "react";
-import { BarChart3, ArrowRight } from "lucide-react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import { BarChart3, Moon, Sun, Github } from "lucide-react";
 
-interface LinspoNavBarProps {
-  brandName?: string;
-  ctaText?: string;
-  ctaHref?: string;
+interface NavbarProps {
+  currentPage?: string;
   className?: string;
 }
-export default function LinspoNavBar({
-  brandName = "Linspo UI",
-  ctaText = "Star on GitHub",
-  ctaHref = "https://github.com/jchiwaii/Linspo-UI",
-  className = "",
-}: LinspoNavBarProps) {
+
+export default function Navbar({ currentPage, className = "" }: NavbarProps) {
+  const [isDark, setIsDark] = useState(false);
+
+  useEffect(() => {
+    const darkModePreference = document.documentElement.classList.contains("dark");
+    setIsDark(darkModePreference);
+  }, []);
+
+  const toggleTheme = () => {
+    const html = document.documentElement;
+    html.classList.add("transitioning");
+    if (isDark) {
+      html.classList.remove("dark");
+    } else {
+      html.classList.add("dark");
+    }
+    setIsDark(!isDark);
+    setTimeout(() => html.classList.remove("transitioning"), 300);
+  };
+
   return (
-    <nav className={`fixed inset-x-0 top-0 z-50 ${className}`}>
-      <div className="w-full px-6">
-        <div className="flex items-center justify-between h-16 bg-transparent">
-          {/* Logo/Brand */}
-          <Link href="/" className="flex items-center space-x-3">
-            <div className="w-9 h-9 flex items-center justify-center rounded-lg bg-gradient-to-br from-slate-800 to-slate-900 shadow-md">
-              <BarChart3 size={16} className="text-white" />
+    <nav className={`fixed top-0 left-0 right-0 z-50 border-b border-border/40 bg-background/80 backdrop-blur-md ${className}`}>
+      <div className="container mx-auto px-4 max-w-7xl">
+        <div className="flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center gap-2 font-semibold text-foreground">
+            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
+              <BarChart3 size={18} className="text-primary-foreground" />
             </div>
-            <span className="text-sm font-semibold text-white hidden sm:block">
-              {brandName}
-            </span>
+            <span>Linspo UI</span>
           </Link>
 
-          {/* CTA Button */}
-          <div className="flex items-center">
+          <div className="flex items-center gap-6">
+            <Link
+              href="/components"
+              className={`text-sm transition-colors ${currentPage === "components"
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground hover:text-foreground"
+                }`}
+            >
+              Components
+            </Link>
+            <Link
+              href="/demo"
+              className={`text-sm transition-colors ${currentPage === "demo"
+                  ? "text-foreground font-medium"
+                  : "text-muted-foreground hover:text-foreground"
+                }`}
+            >
+              Demo
+            </Link>
             <a
-              href={ctaHref}
+              href="https://github.com/jchiwaii/Linspo-UI"
               target="_blank"
               rel="noopener noreferrer"
-              className="group inline-flex items-center space-x-2 px-4 py-2 text-sm font-medium text-white border border-gray-700 rounded-md bg-gray-800/60 hover:bg-gray-700/60 hover:shadow-sm transition-all"
+              className="text-muted-foreground hover:text-foreground transition-colors"
             >
-              <span>{ctaText}</span>
-              <ArrowRight
-                size={14}
-                className="transition-transform duration-200 group-hover:translate-x-0.5"
-              />
+              <Github size={20} />
             </a>
+            <button
+              onClick={toggleTheme}
+              className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent flex items-center justify-center transition-colors"
+              aria-label="Toggle theme"
+            >
+              {isDark ? <Sun size={18} /> : <Moon size={18} />}
+            </button>
           </div>
         </div>
       </div>

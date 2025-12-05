@@ -1,163 +1,476 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
-
-/* Optional: import external animate plugin CSS if you rely on it */
-/* @import "tw-animate-css"; */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
+/* ============================================
+   LINSPO UI - Design System Tokens
+   A shadcn-inspired data visualization library
+   ============================================ */
+
 @theme inline {
+  /* Core Colors */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar: var(--sidebar);
-  --color-chart-5: var(--chart-5);
-  --color-chart-4: var(--chart-4);
-  --color-chart-3: var(--chart-3);
-  --color-chart-2: var(--chart-2);
-  --color-chart-1: var(--chart-1);
-  --color-ring: var(--ring);
-  --color-input: var(--input);
-  --color-border: var(--border);
-  --color-destructive: var(--destructive);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-accent: var(--accent);
-  --color-muted-foreground: var(--muted-foreground);
-  --color-muted: var(--muted);
-  --color-secondary-foreground: var(--secondary-foreground);
-  --color-secondary: var(--secondary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-primary: var(--primary);
-  --color-popover-foreground: var(--popover-foreground);
-  --color-popover: var(--popover);
-  --color-card-foreground: var(--card-foreground);
+
+  /* Typography */
+  --font-sans: "Inter", var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Component Colors */
   --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Chart Colors - Colorblind-friendly palette */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+
+  /* Sidebar */
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Border Radius */
   --radius-sm: calc(var(--radius) - 4px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
 }
 
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-@keyframes blob {
-  0% {
-    transform: translate(0px, 0px) scale(1);
-  }
-  33% {
-    transform: translate(30px, -50px) scale(1.1);
-  }
-  66% {
-    transform: translate(-20px, 20px) scale(0.9);
-  }
-  100% {
-    transform: translate(0px, 0px) scale(1);
-  }
-}
-
-.animate-blob {
-  animation: blob 7s infinite;
-}
-
-.animation-delay-2000 {
-  animation-delay: 2s;
-}
-
-.animation-delay-4000 {
-  animation-delay: 4s;
-}
-
-/* Fix pseudo-class name to root element */
+/* ============================================
+   Light Mode - Clean whites, subtle borders
+   ============================================ */
 :root {
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.13 0.028 261.692);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.13 0.028 261.692);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.13 0.028 261.692);
-  --primary: oklch(0.21 0.034 264.665);
-  --primary-foreground: oklch(0.985 0.002 247.839);
-  --secondary: oklch(0.967 0.003 264.542);
-  --secondary-foreground: oklch(0.21 0.034 264.665);
-  --muted: oklch(0.967 0.003 264.542);
-  --muted-foreground: oklch(0.551 0.027 264.364);
-  --accent: oklch(0.967 0.003 264.542);
-  --accent-foreground: oklch(0.21 0.034 264.665);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.928 0.006 264.531);
-  --input: oklch(0.928 0.006 264.531);
-  --ring: oklch(0.707 0.022 261.325);
-  --chart-1: oklch(0.646 0.222 41.116);
-  --chart-2: oklch(0.6 0.118 184.704);
-  --chart-3: oklch(0.398 0.07 227.392);
-  --chart-4: oklch(0.828 0.189 84.429);
-  --chart-5: oklch(0.769 0.188 70.08);
-  --sidebar: oklch(0.985 0.002 247.839);
-  --sidebar-foreground: oklch(0.13 0.028 261.692);
-  --sidebar-primary: oklch(0.21 0.034 264.665);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.967 0.003 264.542);
-  --sidebar-accent-foreground: oklch(0.21 0.034 264.665);
-  --sidebar-border: oklch(0.928 0.006 264.531);
-  --sidebar-ring: oklch(0.707 0.022 261.325);
+
+  /* Backgrounds */
+  --background: hsl(0 0% 100%);
+  --foreground: hsl(224 71% 4%);
+
+  /* Cards & Popovers */
+  --card: hsl(0 0% 100%);
+  --card-foreground: hsl(224 71% 4%);
+  --popover: hsl(0 0% 100%);
+  --popover-foreground: hsl(224 71% 4%);
+
+  /* Primary - Soft slate blue */
+  --primary: hsl(222 47% 11%);
+  --primary-foreground: hsl(210 40% 98%);
+
+  /* Secondary */
+  --secondary: hsl(220 14% 96%);
+  --secondary-foreground: hsl(222 47% 11%);
+
+  /* Muted */
+  --muted: hsl(220 14% 96%);
+  --muted-foreground: hsl(220 9% 46%);
+
+  /* Accent */
+  --accent: hsl(220 14% 96%);
+  --accent-foreground: hsl(222 47% 11%);
+
+  /* Destructive */
+  --destructive: hsl(0 84% 60%);
+
+  /* Borders & Inputs - Subtle, low-contrast */
+  --border: hsl(220 13% 91%);
+  --input: hsl(220 13% 91%);
+  --ring: hsl(224 71% 4%);
+
+  /* Chart Colors - Muted, sophisticated palette */
+  --chart-1: hsl(221 83% 53%);
+  --chart-2: hsl(160 60% 45%);
+  --chart-3: hsl(30 80% 55%);
+  --chart-4: hsl(280 65% 60%);
+  --chart-5: hsl(340 75% 55%);
+
+  /* Sidebar */
+  --sidebar: hsl(0 0% 98%);
+  --sidebar-foreground: hsl(224 71% 4%);
+  --sidebar-primary: hsl(222 47% 11%);
+  --sidebar-primary-foreground: hsl(210 40% 98%);
+  --sidebar-accent: hsl(220 14% 96%);
+  --sidebar-accent-foreground: hsl(222 47% 11%);
+  --sidebar-border: hsl(220 13% 91%);
+  --sidebar-ring: hsl(224 71% 4%);
 }
 
+/* ============================================
+   Dark Mode - Deep charcoal, not pure black
+   ============================================ */
 .dark {
-  --background: oklch(0.13 0.028 261.692);
-  --foreground: oklch(0.985 0.002 247.839);
-  --card: oklch(0.21 0.034 264.665);
-  --card-foreground: oklch(0.985 0.002 247.839);
-  --popover: oklch(0.21 0.034 264.665);
-  --popover-foreground: oklch(0.985 0.002 247.839);
-  --primary: oklch(0.928 0.006 264.531);
-  --primary-foreground: oklch(0.21 0.034 264.665);
-  --secondary: oklch(0.278 0.033 256.848);
-  --secondary-foreground: oklch(0.985 0.002 247.839);
-  --muted: oklch(0.278 0.033 256.848);
-  --muted-foreground: oklch(0.707 0.022 261.325);
-  --accent: oklch(0.278 0.033 256.848);
-  --accent-foreground: oklch(0.985 0.002 247.839);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.551 0.027 264.364);
-  --chart-1: oklch(0.488 0.243 264.376);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.769 0.188 70.08);
-  --chart-4: oklch(0.627 0.265 303.9);
-  --chart-5: oklch(0.645 0.246 16.439);
-  --sidebar: oklch(0.21 0.034 264.665);
-  --sidebar-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-accent: oklch(0.278 0.033 256.848);
-  --sidebar-accent-foreground: oklch(0.985 0.002 247.839);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.551 0.027 264.364);
+  /* Backgrounds - Deep charcoal */
+  --background: hsl(224 71% 4%);
+  --foreground: hsl(210 40% 98%);
+
+  /* Cards & Popovers */
+  --card: hsl(224 71% 4%);
+  --card-foreground: hsl(210 40% 98%);
+  --popover: hsl(224 71% 4%);
+  --popover-foreground: hsl(210 40% 98%);
+
+  /* Primary */
+  --primary: hsl(210 40% 98%);
+  --primary-foreground: hsl(222 47% 11%);
+
+  /* Secondary */
+  --secondary: hsl(217 33% 17%);
+  --secondary-foreground: hsl(210 40% 98%);
+
+  /* Muted */
+  --muted: hsl(217 33% 17%);
+  --muted-foreground: hsl(215 20% 65%);
+
+  /* Accent */
+  --accent: hsl(217 33% 17%);
+  --accent-foreground: hsl(210 40% 98%);
+
+  /* Destructive */
+  --destructive: hsl(0 62% 50%);
+
+  /* Borders & Inputs */
+  --border: hsl(217 33% 17%);
+  --input: hsl(217 33% 17%);
+  --ring: hsl(212 26% 83%);
+
+  /* Chart Colors - Slightly muted for dark backgrounds */
+  --chart-1: hsl(221 83% 63%);
+  --chart-2: hsl(160 60% 50%);
+  --chart-3: hsl(30 80% 60%);
+  --chart-4: hsl(280 65% 65%);
+  --chart-5: hsl(340 75% 60%);
+
+  /* Sidebar */
+  --sidebar: hsl(224 71% 4%);
+  --sidebar-foreground: hsl(210 40% 98%);
+  --sidebar-primary: hsl(221 83% 63%);
+  --sidebar-primary-foreground: hsl(210 40% 98%);
+  --sidebar-accent: hsl(217 33% 17%);
+  --sidebar-accent-foreground: hsl(210 40% 98%);
+  --sidebar-border: hsl(217 33% 17%);
+  --sidebar-ring: hsl(212 26% 83%);
 }
 
+/* ============================================
+   Base Styles
+   ============================================ */
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: "Manrope", ui-sans-serif, system-ui, -apple-system, "Segoe UI",
-      Roboto, "Helvetica Neue", Arial;
+    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   }
+
+  /* Smooth theme transitions */
+  html.transitioning,
+  html.transitioning *,
+  html.transitioning *::before,
+  html.transitioning *::after {
+    transition: background-color 300ms ease-out,
+      border-color 300ms ease-out,
+      color 200ms ease-out !important;
+  }
+}
+
+/* ============================================
+   Typography Utilities
+   ============================================ */
+.font-mono {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Data values - use monospace for better alignment */
+.data-value {
+  font-family: "JetBrains Mono", ui-monospace, monospace;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.025em;
+}
+
+/* ============================================
+   Animation Utilities
+   ============================================ */
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fade-in-down {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes slide-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-subtle {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.7;
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+/* Animation Classes - Quick and snappy (200-300ms) */
+.animate-fade-in {
+  animation: fade-in 200ms ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fade-in-up 250ms ease-out forwards;
+}
+
+.animate-fade-in-down {
+  animation: fade-in-down 250ms ease-out forwards;
+}
+
+.animate-scale-in {
+  animation: scale-in 200ms ease-out forwards;
+}
+
+.animate-slide-in-right {
+  animation: slide-in-right 250ms ease-out forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulse-subtle 2s ease-in-out infinite;
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.1) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Animation Delays */
+.animation-delay-100 {
+  animation-delay: 100ms;
+}
+
+.animation-delay-200 {
+  animation-delay: 200ms;
+}
+
+.animation-delay-300 {
+  animation-delay: 300ms;
+}
+
+.animation-delay-400 {
+  animation-delay: 400ms;
+}
+
+.animation-delay-500 {
+  animation-delay: 500ms;
+}
+
+/* Stagger children animations */
+.stagger-children>*:nth-child(1) {
+  animation-delay: 0ms;
+}
+
+.stagger-children>*:nth-child(2) {
+  animation-delay: 50ms;
+}
+
+.stagger-children>*:nth-child(3) {
+  animation-delay: 100ms;
+}
+
+.stagger-children>*:nth-child(4) {
+  animation-delay: 150ms;
+}
+
+.stagger-children>*:nth-child(5) {
+  animation-delay: 200ms;
+}
+
+.stagger-children>*:nth-child(6) {
+  animation-delay: 250ms;
+}
+
+/* ============================================
+   Chart & Data Visualization Utilities
+   ============================================ */
+
+/* Subtle grid pattern for chart backgrounds */
+.chart-grid {
+  background-image:
+    linear-gradient(to right, var(--border) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+}
+
+/* Chart tooltip styling */
+.chart-tooltip {
+  @apply bg-popover text-popover-foreground border border-border rounded-lg shadow-lg;
+  @apply px-3 py-2 text-sm;
+}
+
+/* Data point hover effect */
+.data-point {
+  transition: transform 150ms ease-out, opacity 150ms ease-out;
+}
+
+.data-point:hover {
+  transform: scale(1.2);
+}
+
+/* ============================================
+   Card & Surface Utilities
+   ============================================ */
+
+/* Subtle elevation */
+.elevation-1 {
+  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+}
+
+.elevation-2 {
+  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+}
+
+.elevation-3 {
+  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+}
+
+/* Glass effect */
+.glass {
+  @apply bg-background/80 backdrop-blur-sm border border-border/50;
+}
+
+.glass-dark {
+  @apply bg-background/60 backdrop-blur-md border border-border/30;
+}
+
+/* ============================================
+   Interactive States
+   ============================================ */
+
+/* Subtle hover brightness */
+.hover-lift {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+}
+
+/* Focus ring */
+.focus-ring {
+  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
+}
+
+/* Button base styles */
+.btn {
+  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium;
+  @apply transition-all duration-200 ease-out;
+  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+  @apply disabled:pointer-events-none disabled:opacity-50;
+}
+
+.btn-primary {
+  @apply bg-primary text-primary-foreground hover:bg-primary/90;
+}
+
+.btn-secondary {
+  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
+}
+
+.btn-ghost {
+  @apply hover:bg-accent hover:text-accent-foreground;
+}
+
+.btn-outline {
+  @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
 }
