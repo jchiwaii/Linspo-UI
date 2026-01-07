@@ -1,11 +1,11 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
 /* ============================================
    LINSPO UI - Design System Tokens
-   A shadcn-inspired data visualization library
+   A data visualization component library
    ============================================ */
 
 @theme inline {
@@ -13,9 +13,10 @@
   --color-background: var(--background);
   --color-foreground: var(--foreground);
 
-  /* Typography */
-  --font-sans: "Inter", var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-mono: "JetBrains Mono", var(--font-geist-mono), ui-monospace, monospace;
+  /* Typography - Optimized for data visualization */
+  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   /* Component Colors */
   --color-card: var(--card);
@@ -187,7 +188,12 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  }
+
+  /* Use Space Grotesk for headings */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
   }
 
   /* Smooth theme transitions */
@@ -204,6 +210,10 @@
 /* ============================================
    Typography Utilities
    ============================================ */
+.font-display {
+  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
+}
+
 .font-mono {
   font-family: "JetBrains Mono", ui-monospace, monospace;
 }
