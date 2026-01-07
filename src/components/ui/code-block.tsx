@@ -12,7 +12,17 @@ interface CodeBlockProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const CodeBlock = React.forwardRef<HTMLDivElement, CodeBlockProps>(
-  ({ className, code, language = "tsx", showLineNumbers = true, filename, ...props }, ref) => {
+  (
+    {
+      className,
+      code,
+      language = "tsx",
+      showLineNumbers = true,
+      filename,
+      ...props
+    },
+    ref
+  ) => {
     const [copied, setCopied] = React.useState(false);
 
     const copyToClipboard = async () => {
@@ -91,7 +101,11 @@ CodeBlock.displayName = "CodeBlock";
 
 // Simple syntax highlighting
 function highlightSyntax(line: string, language: string): React.ReactNode {
-  if (language !== "tsx" && language !== "typescript" && language !== "javascript") {
+  if (
+    language !== "tsx" &&
+    language !== "typescript" &&
+    language !== "javascript"
+  ) {
     return line;
   }
 
@@ -101,11 +115,21 @@ function highlightSyntax(line: string, language: string): React.ReactNode {
     // Strings
     { pattern: /("[^"]*"|'[^']*'|`[^`]*`)/g, className: "text-chart-2" },
     // Keywords
-    { pattern: /\b(import|export|from|const|let|var|function|return|if|else|for|while|class|interface|type|extends|implements|new|this|super|async|await|try|catch|throw|default)\b/g, className: "text-chart-4" },
+    {
+      pattern:
+        /\b(import|export|from|const|let|var|function|return|if|else|for|while|class|interface|type|extends|implements|new|this|super|async|await|try|catch|throw|default)\b/g,
+      className: "text-chart-4",
+    },
     // React/JSX
-    { pattern: /\b(useState|useEffect|useRef|useMemo|useCallback|React)\b/g, className: "text-chart-1" },
+    {
+      pattern: /\b(useState|useEffect|useRef|useMemo|useCallback|React)\b/g,
+      className: "text-chart-1",
+    },
     // Types
-    { pattern: /\b(string|number|boolean|null|undefined|void|any|never)\b/g, className: "text-chart-3" },
+    {
+      pattern: /\b(string|number|boolean|null|undefined|void|any|never)\b/g,
+      className: "text-chart-3",
+    },
     // Numbers
     { pattern: /\b(\d+\.?\d*)\b/g, className: "text-chart-3" },
     // JSX tags
@@ -114,7 +138,8 @@ function highlightSyntax(line: string, language: string): React.ReactNode {
   ];
 
   let result = line;
-  const replacements: { start: number; end: number; replacement: string }[] = [];
+  const replacements: { start: number; end: number; replacement: string }[] =
+    [];
 
   tokens.forEach(({ pattern, className }) => {
     let match;
@@ -123,7 +148,9 @@ function highlightSyntax(line: string, language: string): React.ReactNode {
       replacements.push({
         start: match.index,
         end: match.index + match[0].length,
-        replacement: `<span class="${className}">${escapeHtml(match[0])}</span>`,
+        replacement: `<span class="${className}">${escapeHtml(
+          match[0]
+        )}</span>`,
       });
     }
   });

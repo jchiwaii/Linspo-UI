@@ -45,7 +45,11 @@ export function PieChart({
 
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
-  const getSlicePath = (startAngle: number, endAngle: number, outerRadius: number) => {
+  const getSlicePath = (
+    startAngle: number,
+    endAngle: number,
+    outerRadius: number
+  ) => {
     const startOuter = {
       x: 50 + outerRadius * Math.cos(startAngle - Math.PI / 2),
       y: 50 + outerRadius * Math.sin(startAngle - Math.PI / 2),
@@ -74,7 +78,9 @@ export function PieChart({
   });
 
   return (
-    <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+    <div
+      className={cn("bg-card border border-border rounded-xl p-6", className)}
+    >
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
@@ -82,7 +88,9 @@ export function PieChart({
         </div>
         <div>
           <h3 className="font-semibold text-foreground">{title || metric}</h3>
-          <p className="text-sm text-muted-foreground">{data.length} segments</p>
+          <p className="text-sm text-muted-foreground">
+            {data.length} segments
+          </p>
         </div>
       </div>
 
@@ -94,7 +102,10 @@ export function PieChart({
       >
         {/* Pie Chart */}
         <div className="relative aspect-square max-w-[280px] mx-auto">
-          <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+          <svg
+            viewBox="0 0 100 100"
+            className="w-full h-full transform -rotate-90"
+          >
             {slices.map((slice, index) => {
               const isHovered = hoveredSlice === index;
               const radius = isHovered ? 42 : 40;
@@ -106,7 +117,9 @@ export function PieChart({
                   stroke="hsl(var(--background))"
                   strokeWidth="1"
                   className="transition-all duration-200 cursor-pointer"
-                  style={{ opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1 }}
+                  style={{
+                    opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1,
+                  }}
                   onMouseEnter={() => setHoveredSlice(index)}
                   onMouseLeave={() => setHoveredSlice(null)}
                 />
@@ -116,7 +129,9 @@ export function PieChart({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-3xl font-semibold font-mono text-foreground">
-                {hoveredSlice !== null ? `${slices[hoveredSlice].percentage}%` : total}
+                {hoveredSlice !== null
+                  ? `${slices[hoveredSlice].percentage}%`
+                  : total}
               </p>
               <p className="text-sm text-muted-foreground">
                 {hoveredSlice !== null ? slices[hoveredSlice].label : "Total"}
@@ -145,10 +160,14 @@ export function PieChart({
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: slice.color }}
                     />
-                    <span className="font-medium text-foreground">{slice.label}</span>
+                    <span className="font-medium text-foreground">
+                      {slice.label}
+                    </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="font-mono text-muted-foreground">{slice.value}</span>
+                    <span className="font-mono text-muted-foreground">
+                      {slice.value}
+                    </span>
                     <span className="font-mono font-semibold text-foreground w-12 text-right">
                       {slice.percentage}%
                     </span>

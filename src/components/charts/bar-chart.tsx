@@ -41,9 +41,9 @@ export function BarChart({
   changeType = "increase",
   animated = true,
 }: BarChartProps) {
-  const [animatedValues, setAnimatedValues] = useState<{ [key: string]: number }>(
-    animated ? {} : Object.fromEntries(data.map((d, i) => [i, d.value]))
-  );
+  const [animatedValues, setAnimatedValues] = useState<{
+    [key: string]: number;
+  }>(animated ? {} : Object.fromEntries(data.map((d, i) => [i, d.value])));
   const [hoveredBar, setHoveredBar] = useState<number | null>(null);
 
   useEffect(() => {
@@ -59,10 +59,14 @@ export function BarChart({
   }, [data, animated]);
 
   const maxValue = Math.max(...data.map((d) => d.value));
-  const average = Math.round(data.reduce((sum, d) => sum + d.value, 0) / data.length);
+  const average = Math.round(
+    data.reduce((sum, d) => sum + d.value, 0) / data.length
+  );
 
   return (
-    <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+    <div
+      className={cn("bg-card border border-border rounded-xl p-6", className)}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -71,11 +75,15 @@ export function BarChart({
           </div>
           <div>
             <h3 className="font-semibold text-foreground">{title || metric}</h3>
-            <p className="text-sm text-muted-foreground">{data.length} categories</p>
+            <p className="text-sm text-muted-foreground">
+              {data.length} categories
+            </p>
           </div>
         </div>
         <div className="text-right">
-          <p className="text-2xl font-semibold text-foreground font-mono">{average}%</p>
+          <p className="text-2xl font-semibold text-foreground font-mono">
+            {average}%
+          </p>
           {change !== undefined && (
             <div
               className={cn(
@@ -125,7 +133,9 @@ export function BarChart({
                   <span
                     className={cn(
                       "text-sm font-mono transition-all duration-200",
-                      isHovered ? "text-foreground font-semibold" : "text-muted-foreground"
+                      isHovered
+                        ? "text-foreground font-semibold"
+                        : "text-muted-foreground"
                     )}
                   >
                     {point.value}%
@@ -153,15 +163,21 @@ export function BarChart({
       {showStats && (
         <div className="grid grid-cols-3 gap-4 mt-8 pt-6 border-t border-border">
           <div className="text-center">
-            <p className="text-xl font-semibold font-mono text-foreground">{maxValue}%</p>
+            <p className="text-xl font-semibold font-mono text-foreground">
+              {maxValue}%
+            </p>
             <p className="text-sm text-muted-foreground">Highest</p>
           </div>
           <div className="text-center">
-            <p className="text-xl font-semibold font-mono text-foreground">{data.length}</p>
+            <p className="text-xl font-semibold font-mono text-foreground">
+              {data.length}
+            </p>
             <p className="text-sm text-muted-foreground">Categories</p>
           </div>
           <div className="text-center">
-            <p className="text-xl font-semibold font-mono text-foreground">{average}%</p>
+            <p className="text-xl font-semibold font-mono text-foreground">
+              {average}%
+            </p>
             <p className="text-sm text-muted-foreground">Average</p>
           </div>
         </div>

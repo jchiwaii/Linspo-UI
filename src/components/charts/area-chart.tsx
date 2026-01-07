@@ -43,9 +43,9 @@ export function AreaChart({
   animated = true,
   color = "hsl(160 60% 45%)",
 }: AreaChartProps) {
-  const [animatedValues, setAnimatedValues] = useState<{ [key: string]: number }>(
-    animated ? {} : Object.fromEntries(data.map((d, i) => [i, d.value]))
-  );
+  const [animatedValues, setAnimatedValues] = useState<{
+    [key: string]: number;
+  }>(animated ? {} : Object.fromEntries(data.map((d, i) => [i, d.value])));
   const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
 
   useEffect(() => {
@@ -81,7 +81,9 @@ export function AreaChart({
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
   return (
-    <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+    <div
+      className={cn("bg-card border border-border rounded-xl p-6", className)}
+    >
       {/* Header */}
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
@@ -90,7 +92,9 @@ export function AreaChart({
           </div>
           <div>
             <h3 className="font-semibold text-foreground">{title || metric}</h3>
-            <p className="text-sm text-muted-foreground">Last {data.length} periods</p>
+            <p className="text-sm text-muted-foreground">
+              Last {data.length} periods
+            </p>
           </div>
         </div>
         <div className="text-right">

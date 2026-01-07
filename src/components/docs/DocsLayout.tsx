@@ -12,9 +12,8 @@ import {
   Grid3X3,
   Gauge,
   Calendar,
-  Layout,
-  Layers,
   Sparkles,
+  Table2,
 } from "lucide-react";
 
 interface NavItem {
@@ -44,8 +43,16 @@ const navigation: NavGroup[] = [
       { title: "Area Chart", href: "/components/area-chart", icon: Activity },
       { title: "Pie Chart", href: "/components/pie-chart", icon: PieChart },
       { title: "Donut Chart", href: "/components/donut-chart", icon: PieChart },
-      { title: "Column Chart", href: "/components/column-chart", icon: BarChart3 },
-      { title: "Scatter Plot", href: "/components/scatter-plot", icon: Grid3X3 },
+      {
+        title: "Column Chart",
+        href: "/components/column-chart",
+        icon: BarChart3,
+      },
+      {
+        title: "Scatter Plot",
+        href: "/components/scatter-plot",
+        icon: Grid3X3,
+      },
       { title: "Gauge Chart", href: "/components/gauge-chart", icon: Gauge },
       { title: "Heatmap", href: "/components/heatmap", icon: Grid3X3 },
     ],
@@ -54,17 +61,16 @@ const navigation: NavGroup[] = [
     title: "Widgets",
     items: [
       { title: "Key Metrics", href: "/components/key-metrics", icon: Sparkles },
-      { title: "Calendar Widget", href: "/components/calendar-widget", icon: Calendar },
-      { title: "Data Visualization", href: "/components/data-visualization", icon: Layers },
-    ],
-  },
-  {
-    title: "Layout",
-    items: [
-      { title: "Hero Section", href: "/components/hero-section", icon: Layout },
-      { title: "Navbar", href: "/components/navbar", icon: Layout },
-      { title: "Interactive Cards", href: "/components/interactive-cards", icon: Layers },
-      { title: "Logo Scrolling", href: "/components/logo-scrolling", icon: Sparkles },
+      {
+        title: "Calendar Widget",
+        href: "/components/calendar-widget",
+        icon: Calendar,
+      },
+      {
+        title: "Data Tables",
+        href: "/components/data-visualization",
+        icon: Table2,
+      },
     ],
   },
 ];
@@ -120,9 +126,7 @@ export function DocsLayout({ children }: { children: React.ReactNode }) {
   return (
     <div className="flex min-h-screen pt-16">
       <DocsSidebar className="hidden lg:block" />
-      <main className="flex-1 px-6 py-8 lg:px-12 max-w-4xl">
-        {children}
-      </main>
+      <main className="flex-1 px-6 py-8 lg:px-12 max-w-4xl">{children}</main>
     </div>
   );
 }

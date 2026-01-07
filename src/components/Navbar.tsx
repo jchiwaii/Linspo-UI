@@ -22,9 +22,11 @@ export default function Navbar({ currentPage, className = "" }: NavbarProps) {
   useEffect(() => {
     // Check system preference and stored preference
     const stored = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+    const prefersDark = window.matchMedia(
+      "(prefers-color-scheme: dark)"
+    ).matches;
     const shouldBeDark = stored === "dark" || (!stored && prefersDark);
-    
+
     setIsDark(shouldBeDark);
     if (shouldBeDark) {
       document.documentElement.classList.add("dark");
@@ -34,7 +36,7 @@ export default function Navbar({ currentPage, className = "" }: NavbarProps) {
   const toggleTheme = () => {
     const html = document.documentElement;
     html.classList.add("transitioning");
-    
+
     if (isDark) {
       html.classList.remove("dark");
       localStorage.setItem("theme", "light");
@@ -42,7 +44,7 @@ export default function Navbar({ currentPage, className = "" }: NavbarProps) {
       html.classList.add("dark");
       localStorage.setItem("theme", "dark");
     }
-    
+
     setIsDark(!isDark);
     setTimeout(() => html.classList.remove("transitioning"), 300);
   };

@@ -8,7 +8,9 @@ interface TabsContextValue {
   setActiveTab: (value: string) => void;
 }
 
-const TabsContext = React.createContext<TabsContextValue | undefined>(undefined);
+const TabsContext = React.createContext<TabsContextValue | undefined>(
+  undefined
+);
 
 function useTabs() {
   const context = React.useContext(TabsContext);
@@ -25,7 +27,10 @@ interface TabsProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const Tabs = React.forwardRef<HTMLDivElement, TabsProps>(
-  ({ className, defaultValue, value, onValueChange, children, ...props }, ref) => {
+  (
+    { className, defaultValue, value, onValueChange, children, ...props },
+    ref
+  ) => {
     const [internalValue, setInternalValue] = React.useState(defaultValue);
     const activeTab = value ?? internalValue;
 
@@ -66,7 +71,8 @@ const TabsList = React.forwardRef<
 ));
 TabsList.displayName = "TabsList";
 
-interface TabsTriggerProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+interface TabsTriggerProps
+  extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   value: string;
 }
 

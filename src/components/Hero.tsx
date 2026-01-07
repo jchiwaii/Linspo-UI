@@ -73,8 +73,11 @@ export default function DataDashboardHero({
             {/* Badge */}
             {badgeText && (
               <div
-                className={`inline-flex items-center gap-2 px-4 py-1.5 mb-8 bg-muted border border-border rounded-full transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  }`}
+                className={`inline-flex items-center gap-2 px-4 py-1.5 mb-8 bg-muted border border-border rounded-full transition-all duration-500 ${
+                  isLoaded
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
               >
                 <Sparkles size={14} className="text-chart-1" />
                 <span className="text-sm font-medium text-muted-foreground">
@@ -85,12 +88,13 @@ export default function DataDashboardHero({
 
             {/* Main heading */}
             <h1
-              className={`text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 transition-all duration-700 delay-100 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`text-5xl md:text-6xl lg:text-7xl font-semibold tracking-tight mb-6 transition-all duration-700 delay-100 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
             >
-              <span className="text-foreground">
-                Data Visualization
-              </span>
+              <span className="text-foreground">Data Visualization</span>
               <br />
               <span className="bg-gradient-to-r from-chart-1 via-chart-2 to-chart-4 bg-clip-text text-transparent">
                 Components
@@ -99,16 +103,22 @@ export default function DataDashboardHero({
 
             {/* Subtitle */}
             <p
-              className={`text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed transition-all duration-700 delay-200 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed transition-all duration-700 delay-200 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
             >
               {subtitle}
             </p>
 
             {/* CTAs */}
             <div
-              className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 transition-all duration-700 delay-300 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`flex flex-col sm:flex-row items-center justify-center gap-4 mb-16 transition-all duration-700 delay-300 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
             >
               <Link
                 href={primaryCTA.href}
@@ -139,7 +149,9 @@ export default function DataDashboardHero({
             {/* Install Command */}
             <div
               className={`flex justify-center mb-16 transition-all duration-700 delay-350 ${
-                isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
               }`}
             >
               <button
@@ -151,15 +163,21 @@ export default function DataDashboardHero({
                 {copied ? (
                   <Check size={14} className="text-chart-2" />
                 ) : (
-                  <Copy size={14} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+                  <Copy
+                    size={14}
+                    className="text-muted-foreground group-hover:text-foreground transition-colors"
+                  />
                 )}
               </button>
             </div>
 
             {/* Mini Chart Preview */}
             <div
-              className={`max-w-3xl mx-auto transition-all duration-1000 delay-400 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-8"
-                }`}
+              className={`max-w-3xl mx-auto transition-all duration-1000 delay-400 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-8"
+              }`}
             >
               <div className="relative bg-card border border-border rounded-xl p-6 shadow-lg">
                 {/* Preview Header */}
@@ -169,12 +187,18 @@ export default function DataDashboardHero({
                       <TrendingUp size={20} className="text-chart-1" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-foreground">Revenue Overview</h3>
-                      <p className="text-sm text-muted-foreground">Last 10 months</p>
+                      <h3 className="font-semibold text-foreground">
+                        Revenue Overview
+                      </h3>
+                      <p className="text-sm text-muted-foreground">
+                        Last 10 months
+                      </p>
                     </div>
                   </div>
                   <div className="text-right">
-                    <p className="text-2xl font-semibold data-value text-foreground">$847.2K</p>
+                    <p className="text-2xl font-semibold data-value text-foreground">
+                      $847.2K
+                    </p>
                     <p className="text-sm text-chart-2 flex items-center gap-1 justify-end">
                       <TrendingUp size={14} />
                       <span>+23.5%</span>
@@ -184,7 +208,11 @@ export default function DataDashboardHero({
 
                 {/* Mini Chart */}
                 <div className="relative h-40">
-                  <svg className="w-full h-full" viewBox="0 0 400 100" preserveAspectRatio="none">
+                  <svg
+                    className="w-full h-full"
+                    viewBox="0 0 400 100"
+                    preserveAspectRatio="none"
+                  >
                     {/* Grid lines */}
                     {[0, 25, 50, 75, 100].map((y) => (
                       <line
@@ -202,30 +230,58 @@ export default function DataDashboardHero({
 
                     {/* Area fill */}
                     <defs>
-                      <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
-                        <stop offset="0%" stopColor="hsl(221 83% 53%)" stopOpacity="0.3" />
-                        <stop offset="100%" stopColor="hsl(221 83% 53%)" stopOpacity="0" />
+                      <linearGradient
+                        id="areaGradient"
+                        x1="0"
+                        y1="0"
+                        x2="0"
+                        y2="1"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="hsl(221 83% 53%)"
+                          stopOpacity="0.3"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="hsl(221 83% 53%)"
+                          stopOpacity="0"
+                        />
                       </linearGradient>
                     </defs>
                     <path
-                      d={`M 0 ${100 - miniChartData[0]} ${miniChartData.map((value, index) =>
-                        `L ${(index / (miniChartData.length - 1)) * 400} ${100 - value}`
-                      ).join(' ')} L 400 100 L 0 100 Z`}
+                      d={`M 0 ${100 - miniChartData[0]} ${miniChartData
+                        .map(
+                          (value, index) =>
+                            `L ${(index / (miniChartData.length - 1)) * 400} ${
+                              100 - value
+                            }`
+                        )
+                        .join(" ")} L 400 100 L 0 100 Z`}
                       fill="url(#areaGradient)"
-                      className={`transition-all duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      className={`transition-all duration-1000 ${
+                        isLoaded ? "opacity-100" : "opacity-0"
+                      }`}
                     />
 
                     {/* Line */}
                     <path
-                      d={`M ${miniChartData.map((value, index) =>
-                        `${(index / (miniChartData.length - 1)) * 400} ${100 - value}`
-                      ).join(' L ')}`}
+                      d={`M ${miniChartData
+                        .map(
+                          (value, index) =>
+                            `${(index / (miniChartData.length - 1)) * 400} ${
+                              100 - value
+                            }`
+                        )
+                        .join(" L ")}`}
                       fill="none"
                       stroke="hsl(221 83% 53%)"
                       strokeWidth="2.5"
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className={`transition-all duration-1000 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                      className={`transition-all duration-1000 ${
+                        isLoaded ? "opacity-100" : "opacity-0"
+                      }`}
                     />
 
                     {/* Data points */}
@@ -238,7 +294,9 @@ export default function DataDashboardHero({
                         fill="hsl(221 83% 53%)"
                         stroke="white"
                         strokeWidth="2"
-                        className={`transition-all duration-500 ${isLoaded ? 'opacity-100' : 'opacity-0'}`}
+                        className={`transition-all duration-500 ${
+                          isLoaded ? "opacity-100" : "opacity-0"
+                        }`}
                         style={{ transitionDelay: `${index * 50}ms` }}
                       />
                     ))}
@@ -248,15 +306,21 @@ export default function DataDashboardHero({
                 {/* Preview Stats */}
                 <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t border-border">
                   <div className="text-center">
-                    <p className="text-lg font-semibold data-value text-foreground">95</p>
+                    <p className="text-lg font-semibold data-value text-foreground">
+                      95
+                    </p>
                     <p className="text-xs text-muted-foreground">Peak Value</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-semibold data-value text-foreground">69</p>
+                    <p className="text-lg font-semibold data-value text-foreground">
+                      69
+                    </p>
                     <p className="text-xs text-muted-foreground">Average</p>
                   </div>
                   <div className="text-center">
-                    <p className="text-lg font-semibold data-value text-foreground">35</p>
+                    <p className="text-lg font-semibold data-value text-foreground">
+                      35
+                    </p>
                     <p className="text-xs text-muted-foreground">Minimum</p>
                   </div>
                 </div>
@@ -274,8 +338,8 @@ export default function DataDashboardHero({
               Beautiful by Default
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Production-ready components that look polished out of the box.
-              No styling required.
+              Production-ready components that look polished out of the box. No
+              styling required.
             </p>
           </div>
 
@@ -284,18 +348,21 @@ export default function DataDashboardHero({
               {
                 icon: <PieChart size={24} />,
                 title: "Polished Design",
-                description: "Every component is crafted with attention to detail. Muted colors, subtle shadows, and refined typography."
+                description:
+                  "Every component is crafted with attention to detail. Muted colors, subtle shadows, and refined typography.",
               },
               {
                 icon: <Activity size={24} />,
                 title: "Smooth Animations",
-                description: "Quick, purposeful animations that feel natural. Data transitions that help users understand changes."
+                description:
+                  "Quick, purposeful animations that feel natural. Data transitions that help users understand changes.",
               },
               {
                 icon: <BarChart3 size={24} />,
                 title: "Dark Mode Ready",
-                description: "Beautiful in both light and dark modes. Smooth transitions when switching themes."
-              }
+                description:
+                  "Beautiful in both light and dark modes. Smooth transitions when switching themes.",
+              },
             ].map((feature, index) => (
               <div
                 key={index}
@@ -307,9 +374,7 @@ export default function DataDashboardHero({
                 <h3 className="text-lg font-semibold text-foreground mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-muted-foreground">
-                  {feature.description}
-                </p>
+                <p className="text-muted-foreground">{feature.description}</p>
               </div>
             ))}
           </div>
@@ -324,7 +389,8 @@ export default function DataDashboardHero({
               Everything You Need
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Charts, tables, metrics, and dashboard components for data-driven applications.
+              Charts, tables, metrics, and dashboard components for data-driven
+              applications.
             </p>
           </div>
 
@@ -349,7 +415,9 @@ export default function DataDashboardHero({
                 </div>
                 <div>
                   <p className="font-medium text-foreground">{category.name}</p>
-                  <p className="text-xs text-muted-foreground">{category.count} component{category.count > 1 ? 's' : ''}</p>
+                  <p className="text-xs text-muted-foreground">
+                    {category.count} component{category.count > 1 ? "s" : ""}
+                  </p>
                 </div>
               </Link>
             ))}

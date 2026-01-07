@@ -61,7 +61,10 @@ const MiniPieChart = () => (
   <svg className="w-12 h-12 mx-auto" viewBox="0 0 32 32">
     <circle cx="16" cy="16" r="12" className="fill-chart-1 opacity-20" />
     <path d="M 16 4 A 12 12 0 0 1 26.4 22 L 16 16 Z" className="fill-chart-1" />
-    <path d="M 26.4 22 A 12 12 0 0 1 5.6 22 L 16 16 Z" className="fill-chart-2" />
+    <path
+      d="M 26.4 22 A 12 12 0 0 1 5.6 22 L 16 16 Z"
+      className="fill-chart-2"
+    />
   </svg>
 );
 
@@ -111,11 +114,15 @@ const MiniGauge = () => (
 
 const MiniHeatmap = () => (
   <div className="grid grid-cols-5 gap-0.5 w-full max-w-[60px] mx-auto">
-    {[0.2, 0.8, 0.4, 0.6, 0.3, 0.9, 0.5, 0.7, 0.4, 0.8, 0.3, 0.6, 0.9, 0.5, 0.7].map(
-      (opacity, i) => (
-        <div key={i} className="w-2 h-2 rounded-sm bg-chart-1" style={{ opacity }} />
-      )
-    )}
+    {[
+      0.2, 0.8, 0.4, 0.6, 0.3, 0.9, 0.5, 0.7, 0.4, 0.8, 0.3, 0.6, 0.9, 0.5, 0.7,
+    ].map((opacity, i) => (
+      <div
+        key={i}
+        className="w-2 h-2 rounded-sm bg-chart-1"
+        style={{ opacity }}
+      />
+    ))}
   </div>
 );
 
@@ -160,21 +167,23 @@ const MiniCalendar = () => (
 const MiniMetrics = () => (
   <div className="flex gap-2">
     {[1, 2, 3].map((i) => (
-      <div key={i} className="flex-1 h-8 bg-muted rounded flex items-center justify-center">
+      <div
+        key={i}
+        className="flex-1 h-8 bg-muted rounded flex items-center justify-center"
+      >
         <div className="w-4 h-1.5 bg-chart-1 rounded" />
       </div>
     ))}
   </div>
 );
 
-
-
 const components: ComponentItem[] = [
   // Charts
   {
     id: "bar-chart",
     title: "Bar Chart",
-    description: "Horizontal bar charts for comparing categorical data with smooth animations.",
+    description:
+      "Horizontal bar charts for comparing categorical data with smooth animations.",
     category: "Charts",
     icon: <BarChart3 size={20} />,
     tags: ["Charts", "Comparison"],
@@ -184,7 +193,8 @@ const components: ComponentItem[] = [
   {
     id: "line-chart",
     title: "Line Chart",
-    description: "Responsive line charts for time-series and trend visualization.",
+    description:
+      "Responsive line charts for time-series and trend visualization.",
     category: "Charts",
     icon: <TrendingUp size={20} />,
     tags: ["Charts", "Time Series"],
@@ -296,8 +306,16 @@ const components: ComponentItem[] = [
 
 const categories = [
   { id: "All", label: "All Components", count: components.length },
-  { id: "Charts", label: "Charts", count: components.filter((c) => c.category === "Charts").length },
-  { id: "Widgets", label: "Widgets", count: components.filter((c) => c.category === "Widgets").length },
+  {
+    id: "Charts",
+    label: "Charts",
+    count: components.filter((c) => c.category === "Charts").length,
+  },
+  {
+    id: "Widgets",
+    label: "Widgets",
+    count: components.filter((c) => c.category === "Widgets").length,
+  },
 ];
 
 export default function ComponentsPage() {
@@ -305,12 +323,15 @@ export default function ComponentsPage() {
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredComponents = components.filter((comp) => {
-    const matchesCategory = selectedCategory === "All" || comp.category === selectedCategory;
+    const matchesCategory =
+      selectedCategory === "All" || comp.category === selectedCategory;
     const matchesSearch =
       searchQuery === "" ||
       comp.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       comp.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      comp.tags.some((tag) => tag.toLowerCase().includes(searchQuery.toLowerCase()));
+      comp.tags.some((tag) =>
+        tag.toLowerCase().includes(searchQuery.toLowerCase())
+      );
     return matchesCategory && matchesSearch;
   });
 
@@ -387,10 +408,12 @@ export default function ComponentsPage() {
           {/* Header */}
           <div className="border-b border-border bg-background/95 backdrop-blur-sm sticky top-16 z-30">
             <div className="px-6 lg:px-12 py-8">
-              <h1 className="text-3xl font-bold text-foreground mb-2">Components</h1>
+              <h1 className="text-3xl font-bold text-foreground mb-2">
+                Components
+              </h1>
               <p className="text-muted-foreground">
-                Beautiful, accessible data visualization components. Copy and paste into your
-                projects.
+                Beautiful, accessible data visualization components. Copy and
+                paste into your projects.
               </p>
             </div>
 
@@ -418,7 +441,9 @@ export default function ComponentsPage() {
           <div className="px-6 lg:px-12 py-8">
             {filteredComponents.length === 0 ? (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">No components found matching your search.</p>
+                <p className="text-muted-foreground">
+                  No components found matching your search.
+                </p>
               </div>
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
@@ -442,7 +467,9 @@ export default function ComponentsPage() {
                           <div className="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-200">
                             {component.icon}
                           </div>
-                          <h3 className="font-semibold text-foreground">{component.title}</h3>
+                          <h3 className="font-semibold text-foreground">
+                            {component.title}
+                          </h3>
                         </div>
                         <ArrowRight
                           size={16}

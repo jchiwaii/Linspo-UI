@@ -139,7 +139,11 @@ export function ComponentDoc({
         </TabsContent>
 
         <TabsContent value="code">
-          <CodeBlock code={code} language="tsx" filename={`${title.toLowerCase().replace(/\s+/g, "-")}.tsx`} />
+          <CodeBlock
+            code={code}
+            language="tsx"
+            filename={`${title.toLowerCase().replace(/\s+/g, "-")}.tsx`}
+          />
         </TabsContent>
       </Tabs>
 
@@ -151,15 +155,26 @@ export function ComponentDoc({
             <table className="w-full text-sm">
               <thead className="bg-muted">
                 <tr>
-                  <th className="text-left p-3 font-medium text-foreground">Prop</th>
-                  <th className="text-left p-3 font-medium text-foreground">Type</th>
-                  <th className="text-left p-3 font-medium text-foreground">Default</th>
-                  <th className="text-left p-3 font-medium text-foreground">Description</th>
+                  <th className="text-left p-3 font-medium text-foreground">
+                    Prop
+                  </th>
+                  <th className="text-left p-3 font-medium text-foreground">
+                    Type
+                  </th>
+                  <th className="text-left p-3 font-medium text-foreground">
+                    Default
+                  </th>
+                  <th className="text-left p-3 font-medium text-foreground">
+                    Description
+                  </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-border">
                 {props.map((prop) => (
-                  <tr key={prop.name} className="hover:bg-muted/50 transition-colors">
+                  <tr
+                    key={prop.name}
+                    className="hover:bg-muted/50 transition-colors"
+                  >
                     <td className="p-3">
                       <code className="text-chart-1 font-mono text-xs bg-chart-1/10 px-1.5 py-0.5 rounded">
                         {prop.name}
@@ -182,7 +197,9 @@ export function ComponentDoc({
                         <span className="text-muted-foreground">—</span>
                       )}
                     </td>
-                    <td className="p-3 text-muted-foreground">{prop.description}</td>
+                    <td className="p-3 text-muted-foreground">
+                      {prop.description}
+                    </td>
                   </tr>
                 ))}
               </tbody>

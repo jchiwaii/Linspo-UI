@@ -95,7 +95,9 @@ export function DonutChart({
   });
 
   return (
-    <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+    <div
+      className={cn("bg-card border border-border rounded-xl p-6", className)}
+    >
       {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-lg bg-chart-2/10 flex items-center justify-center">
@@ -103,7 +105,9 @@ export function DonutChart({
         </div>
         <div>
           <h3 className="font-semibold text-foreground">{title || metric}</h3>
-          <p className="text-sm text-muted-foreground">{data.length} segments</p>
+          <p className="text-sm text-muted-foreground">
+            {data.length} segments
+          </p>
         </div>
       </div>
 
@@ -122,10 +126,17 @@ export function DonutChart({
               return (
                 <path
                   key={index}
-                  d={getDonutPath(slice.startAngle, slice.endAngle, innerRadius, outer)}
+                  d={getDonutPath(
+                    slice.startAngle,
+                    slice.endAngle,
+                    innerRadius,
+                    outer
+                  )}
                   fill={slice.color}
                   className="transition-all duration-200 cursor-pointer"
-                  style={{ opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1 }}
+                  style={{
+                    opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1,
+                  }}
                   onMouseEnter={() => setHoveredSlice(index)}
                   onMouseLeave={() => setHoveredSlice(null)}
                 />
@@ -135,7 +146,9 @@ export function DonutChart({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-3xl font-semibold font-mono text-foreground">
-                {hoveredSlice !== null ? `${slices[hoveredSlice].percentage}%` : `${total}`}
+                {hoveredSlice !== null
+                  ? `${slices[hoveredSlice].percentage}%`
+                  : `${total}`}
               </p>
               <p className="text-sm text-muted-foreground">
                 {hoveredSlice !== null ? slices[hoveredSlice].label : "Total"}
@@ -164,10 +177,14 @@ export function DonutChart({
                       className="w-3 h-3 rounded-full"
                       style={{ backgroundColor: slice.color }}
                     />
-                    <span className="font-medium text-foreground">{slice.label}</span>
+                    <span className="font-medium text-foreground">
+                      {slice.label}
+                    </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="font-mono text-muted-foreground">{slice.value}</span>
+                    <span className="font-mono text-muted-foreground">
+                      {slice.value}
+                    </span>
                     <span className="font-mono font-semibold text-foreground w-12 text-right">
                       {slice.percentage}%
                     </span>
