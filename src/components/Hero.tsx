@@ -10,9 +10,10 @@ import {
   PieChart,
   Activity,
   Github,
-  ExternalLink
+  ExternalLink,
+  Copy,
+  Check,
 } from "lucide-react";
-import Navbar from "./Navbar";
 
 interface DataDashboardHeroProps {
   subtitle?: string;
@@ -45,17 +46,22 @@ export default function DataDashboardHero({
   className = "",
 }: DataDashboardHeroProps) {
   const [isLoaded, setIsLoaded] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     setIsLoaded(true);
   }, []);
 
-  return (
-    <div className={`min-h-screen bg-background ${className}`}>
-      <Navbar />
+  const copyInstallCommand = async () => {
+    await navigator.clipboard.writeText("npx linspo-ui init");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
 
+  return (
+    <div className={`min-h-screen bg-background pt-16 ${className}`}>
       {/* Hero Section */}
-      <section className="pt-32 pb-20 relative overflow-hidden">
+      <section className="pt-16 pb-20 relative overflow-hidden">
         {/* Subtle gradient background */}
         <div className="absolute inset-0 bg-gradient-to-b from-muted/30 via-background to-background" />
 
@@ -128,6 +134,26 @@ export default function DataDashboardHero({
                   <ExternalLink size={14} className="text-muted-foreground" />
                 </a>
               )}
+            </div>
+
+            {/* Install Command */}
+            <div
+              className={`flex justify-center mb-16 transition-all duration-700 delay-350 ${
+                isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+              }`}
+            >
+              <button
+                onClick={copyInstallCommand}
+                className="group flex items-center gap-3 px-4 py-2.5 bg-muted border border-border rounded-lg font-mono text-sm hover:bg-accent transition-colors"
+              >
+                <span className="text-muted-foreground">$</span>
+                <code>npx linspo-ui init</code>
+                {copied ? (
+                  <Check size={14} className="text-chart-2" />
+                ) : (
+                  <Copy size={14} className="text-muted-foreground group-hover:text-foreground transition-colors" />
+                )}
+              </button>
             </div>
 
             {/* Mini Chart Preview */}

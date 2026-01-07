@@ -6,21 +6,20 @@ import LinspoNavBar from "@/components/Navbar";
 export default function ConditionalNavbar() {
   const pathname = usePathname();
 
-  // Hide navbar on individual component pages
-  // Show navbar on home page, components listing page, and demo page
-  const shouldShowNavbar =
-    pathname === "/" ||
-    pathname === "/components" ||
-    pathname === "/demo" ||
-    pathname.startsWith("/components/[");
+  // Show navbar on all pages - it's fixed and consistent
+  // The layout handles proper spacing with pt-16 on content
+  return <LinspoNavBar currentPage={getCurrentPage(pathname)} />;
+}
 
-  // Don't show navbar on individual component showcase pages
-  const isComponentPage =
-    pathname.startsWith("/components/") && pathname !== "/components";
-
-  if (isComponentPage) {
-    return null;
+function getCurrentPage(pathname: string): string | undefined {
+  if (pathname === "/components" || pathname.startsWith("/components/")) {
+    return "components";
   }
-
-  return <LinspoNavBar />;
+  if (pathname === "/demo") {
+    return "demo";
+  }
+  if (pathname === "/docs" || pathname.startsWith("/docs/")) {
+    return "docs";
+  }
+  return undefined;
 }

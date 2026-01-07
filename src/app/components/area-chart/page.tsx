@@ -1,141 +1,193 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Eye, Code2, Copy, Check } from "lucide-react";
-import AreaChart from "@/components/AreaChart";
+import { ComponentDoc } from "@/components/docs/ComponentDoc";
+import { AreaChart } from "@/components/charts/area-chart";
 
-export default function AreaChartShowcasePage() {
-  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
-  const [copied, setCopied] = useState(false);
+const sampleData = [
+  { label: "Jan", value: 2400 },
+  { label: "Feb", value: 1398 },
+  { label: "Mar", value: 9800 },
+  { label: "Apr", value: 3908 },
+  { label: "May", value: 4800 },
+  { label: "Jun", value: 3800 },
+  { label: "Jul", value: 4300 },
+  { label: "Aug", value: 5200 },
+];
 
-  const copyToClipboard = async () => {
-    try {
-      await navigator.clipboard.writeText("// AreaChart component code...");
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy code:", err);
-    }
+const code = `"use client";
+
+import React, { useState, useEffect } from "react";
+import { TrendingUp, TrendingDown, Activity } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+export interface AreaChartDataPoint {
+  label: string;
+  value: number;
+}
+
+export interface AreaChartProps {
+  data: AreaChartDataPoint[];
+  className?: string;
+  title?: string;
+  metric?: string;
+  change?: number;
+  changeType?: "increase" | "decrease" | "neutral";
+  showStats?: boolean;
+  animated?: boolean;
+  color?: string;
+}
+
+export function AreaChart({
+  data,
+  className,
+  title,
+  metric = "Total Volume",
+  change,
+  changeType = "increase",
+  showStats = true,
+  animated = true,
+  color = "hsl(160 60% 45%)",
+}: AreaChartProps) {
+  const [animatedValues, setAnimatedValues] = useState<{ [key: string]: number }>(
+    animated ? {} : Object.fromEntries(data.map((d, i) => [i, d.value]))
+  );
+  const [hoveredPoint, setHoveredPoint] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (!animated) return;
+    const timer = setTimeout(() => {
+      const newValues: { [key: string]: number } = {};
+      data.forEach((_, index) => {
+        newValues[index] = data[index].value;
+      });
+      setAnimatedValues(newValues);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, [data, animated]);
+
+  const maxValue = Math.max(...data.map((d) => d.value));
+  const minValue = Math.min(...data.map((d) => d.value));
+  const range = maxValue - minValue || 1;
+
+  const getY = (value: number) => {
+    const padding = range * 0.1;
+    return 100 - ((value - minValue + padding) / (range + padding * 2)) * 100;
   };
 
+  const points = data
+    .map((_, index) => {
+      const x = (index / (data.length - 1)) * 100;
+      const y = getY(animatedValues[index] ?? minValue);
+      return \`\${x},\${y}\`;
+    })
+    .join(" ");
+
+  const areaPoints = \`0,100 \${points} 100,100\`;
+  const total = data.reduce((sum, d) => sum + d.value, 0);
+
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"></div>
-
-      <div className="relative">
-        <div className="container mx-auto px-4 max-w-7xl py-12">
-          <div className="flex items-center justify-between mb-8">
-            <Link
-              href="/components"
-              className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-300"
-            >
-              <ArrowLeft size={20} />
-              <span>Back to Components</span>
-            </Link>
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setActiveTab("preview")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeTab === "preview"
-                    ? "bg-white text-black"
-                    : "bg-gray-800 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Eye size={16} />
-                <span>Preview</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("code")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeTab === "code"
-                    ? "bg-white text-black"
-                    : "bg-gray-800 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Code2 size={16} />
-                <span>Code</span>
-              </button>
-            </div>
+    <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-chart-2/10 flex items-center justify-center">
+            <Activity size={20} className="text-chart-2" />
           </div>
-
-          <div className="mb-12">
-            <h1 className="text-4xl font-light mb-4 bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
-              Area Chart
-            </h1>
-            <p className="text-gray-400 text-lg max-w-3xl">
-              Filled area charts perfect for showing cumulative data over time
-              with smooth gradients and animations.
-            </p>
-            <div className="flex flex-wrap gap-2 mt-4">
-              {[
-                "Area Chart",
-                "Cumulative",
-                "Filled",
-                "Gradients",
-                "Time Series",
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-zinc-800/50 overflow-hidden">
-            {activeTab === "preview" ? (
-              <div className="p-8">
-                <div className="bg-white rounded-xl overflow-hidden">
-                  <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-xs text-gray-500 font-mono">
-                      preview.localhost:3000
-                    </span>
-                  </div>
-                  <div className="min-h-[600px] relative">
-                    <AreaChart />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="p-6">
-                <div className="bg-zinc-900 rounded-xl border border-zinc-800">
-                  <div className="border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
-                    <span className="text-zinc-400 text-sm font-mono">
-                      AreaChart.tsx
-                    </span>
-                    <button
-                      onClick={copyToClipboard}
-                      className="flex items-center space-x-2 px-3 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-md text-sm font-medium transition-all duration-300 border border-zinc-700"
-                    >
-                      {copied ? <Check size={14} /> : <Copy size={14} />}
-                      <span className="text-xs">
-                        {copied ? "Copied!" : "Copy"}
-                      </span>
-                    </button>
-                  </div>
-                  <div className="p-4 text-sm text-gray-300">
-                    <p>
-                      Filled area chart component with gradient fills and smooth
-                      animations.
-                    </p>
-                    <p className="mt-2">
-                      Features: Cumulative data visualization, gradient fills,
-                      smooth curves.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div>
+            <h3 className="font-semibold text-foreground">{title || metric}</h3>
+            <p className="text-sm text-muted-foreground">Last {data.length} periods</p>
           </div>
         </div>
+        <div className="text-right">
+          <p className="text-2xl font-semibold font-mono text-foreground">
+            {total.toLocaleString()}
+          </p>
+        </div>
+      </div>
+
+      <div className="relative h-64 mt-4">
+        <svg className="w-full h-full overflow-visible" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <linearGradient id="areaGradient" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stopColor={color} stopOpacity="0.4" />
+              <stop offset="100%" stopColor={color} stopOpacity="0" />
+            </linearGradient>
+          </defs>
+
+          <polygon fill="url(#areaGradient)" points={areaPoints} />
+          <polyline
+            fill="none"
+            stroke={color}
+            strokeWidth="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            points={points}
+          />
+        </svg>
+      </div>
+    </div>
+  );
+}`;
+
+const props = [
+  {
+    name: "data",
+    type: "AreaChartDataPoint[]",
+    required: true,
+    description: "Array of data points with label and value properties.",
+  },
+  {
+    name: "className",
+    type: "string",
+    description: "Additional CSS classes to apply to the container.",
+  },
+  {
+    name: "title",
+    type: "string",
+    description: "Title displayed in the chart header.",
+  },
+  {
+    name: "metric",
+    type: "string",
+    default: '"Total Volume"',
+    description: "Label for the metric being displayed.",
+  },
+  {
+    name: "showStats",
+    type: "boolean",
+    default: "true",
+    description: "Whether to show the stats footer.",
+  },
+  {
+    name: "animated",
+    type: "boolean",
+    default: "true",
+    description: "Whether to animate on mount.",
+  },
+  {
+    name: "color",
+    type: "string",
+    default: '"hsl(160 60% 45%)"',
+    description: "Color of the area fill and line.",
+  },
+];
+
+export default function AreaChartPage() {
+  return (
+    <div className="min-h-screen bg-background pt-16">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <ComponentDoc
+          title="Area Chart"
+          description="Area charts for visualizing volume and cumulative trends over time with smooth gradient fills."
+          code={code}
+          category="Charts"
+          dependencies={["lucide-react"]}
+          installCommand="npx linspo-ui add area-chart"
+          props={props}
+        >
+          <div className="w-full max-w-lg">
+            <AreaChart data={sampleData} change={15.3} />
+          </div>
+        </ComponentDoc>
       </div>
     </div>
   );

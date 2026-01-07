@@ -1,16 +1,5 @@
 "use client";
 
-import { ComponentDoc } from "@/components/docs/ComponentDoc";
-import { DonutChart } from "@/components/charts/donut-chart";
-
-const sampleData = [
-  { label: "Completed", value: 63 },
-  { label: "In Progress", value: 25 },
-  { label: "Pending", value: 12 },
-];
-
-const code = `"use client";
-
 import React, { useState } from "react";
 import { PieChart as DonutIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -30,6 +19,12 @@ export interface DonutChartProps {
   colors?: string[];
 }
 
+const defaultData: DonutChartDataPoint[] = [
+  { label: "Completed", value: 63 },
+  { label: "In Progress", value: 25 },
+  { label: "Pending", value: 12 },
+];
+
 const defaultColors = [
   "hsl(160 60% 45%)",
   "hsl(221 83% 53%)",
@@ -39,7 +34,7 @@ const defaultColors = [
 ];
 
 export function DonutChart({
-  data,
+  data = defaultData,
   className,
   title,
   metric = "Task Status",
@@ -52,7 +47,12 @@ export function DonutChart({
   const total = data.reduce((sum, d) => sum + d.value, 0);
   const outerRadius = 40;
 
-  const getDonutPath = (startAngle: number, endAngle: number, inner: number, outer: number) => {
+  const getDonutPath = (
+    startAngle: number,
+    endAngle: number,
+    inner: number,
+    outer: number
+  ) => {
     const startOuter = {
       x: 50 + outer * Math.cos(startAngle - Math.PI / 2),
       y: 50 + outer * Math.sin(startAngle - Math.PI / 2),
@@ -70,13 +70,13 @@ export function DonutChart({
       y: 50 + inner * Math.sin(startAngle - Math.PI / 2),
     };
     const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-    return \`
-      M \${startOuter.x} \${startOuter.y}
-      A \${outer} \${outer} 0 \${largeArc} 1 \${endOuter.x} \${endOuter.y}
-      L \${startInner.x} \${startInner.y}
-      A \${inner} \${inner} 0 \${largeArc} 0 \${endInner.x} \${endInner.y}
+    return `
+      M ${startOuter.x} ${startOuter.y}
+      A ${outer} ${outer} 0 ${largeArc} 1 ${endOuter.x} ${endOuter.y}
+      L ${startInner.x} ${startInner.y}
+      A ${inner} ${inner} 0 ${largeArc} 0 ${endInner.x} ${endInner.y}
       Z
-    \`;
+    `;
   };
 
   let currentAngle = 0;
@@ -96,6 +96,7 @@ export function DonutChart({
 
   return (
     <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+      {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-lg bg-chart-2/10 flex items-center justify-center">
           <DonutIcon size={20} className="text-chart-2" />
@@ -106,7 +107,13 @@ export function DonutChart({
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 items-center">
+      <div
+        className={cn(
+          "gap-8 items-center",
+          showLegend ? "grid md:grid-cols-2" : "flex justify-center"
+        )}
+      >
+        {/* Donut Chart */}
         <div className="relative aspect-square max-w-[280px] mx-auto">
           <svg viewBox="0 0 100 100" className="w-full h-full">
             {slices.map((slice, index) => {
@@ -118,6 +125,7 @@ export function DonutChart({
                   d={getDonutPath(slice.startAngle, slice.endAngle, innerRadius, outer)}
                   fill={slice.color}
                   className="transition-all duration-200 cursor-pointer"
+                  style={{ opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1 }}
                   onMouseEnter={() => setHoveredSlice(index)}
                   onMouseLeave={() => setHoveredSlice(null)}
                 />
@@ -127,7 +135,7 @@ export function DonutChart({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-3xl font-semibold font-mono text-foreground">
-                {hoveredSlice !== null ? \`\${slices[hoveredSlice].percentage}%\` : total}
+                {hoveredSlice !== null ? `${slices[hoveredSlice].percentage}%` : `${total}`}
               </p>
               <p className="text-sm text-muted-foreground">
                 {hoveredSlice !== null ? slices[hoveredSlice].label : "Total"}
@@ -136,89 +144,42 @@ export function DonutChart({
           </div>
         </div>
 
+        {/* Legend */}
         {showLegend && (
           <div className="space-y-3">
-            {slices.map((slice, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 cursor-pointer"
-                onMouseEnter={() => setHoveredSlice(index)}
-                onMouseLeave={() => setHoveredSlice(null)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: slice.color }} />
-                  <span className="font-medium text-foreground">{slice.label}</span>
+            {slices.map((slice, index) => {
+              const isHovered = hoveredSlice === index;
+              return (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer",
+                    isHovered ? "bg-accent" : "hover:bg-accent/50"
+                  )}
+                  onMouseEnter={() => setHoveredSlice(index)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: slice.color }}
+                    />
+                    <span className="font-medium text-foreground">{slice.label}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-muted-foreground">{slice.value}</span>
+                    <span className="font-mono font-semibold text-foreground w-12 text-right">
+                      {slice.percentage}%
+                    </span>
+                  </div>
                 </div>
-                <span className="font-mono font-semibold text-foreground">{slice.percentage}%</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
     </div>
   );
-}`;
-
-const props = [
-  {
-    name: "data",
-    type: "DonutChartDataPoint[]",
-    required: true,
-    description: "Array of data points with label and value properties.",
-  },
-  {
-    name: "className",
-    type: "string",
-    description: "Additional CSS classes to apply to the container.",
-  },
-  {
-    name: "title",
-    type: "string",
-    description: "Title displayed in the chart header.",
-  },
-  {
-    name: "metric",
-    type: "string",
-    default: '"Task Status"',
-    description: "Label for the metric being displayed.",
-  },
-  {
-    name: "showLegend",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show the legend alongside the chart.",
-  },
-  {
-    name: "innerRadius",
-    type: "number",
-    default: "25",
-    description: "Inner radius of the donut hole.",
-  },
-  {
-    name: "colors",
-    type: "string[]",
-    description: "Array of colors for each segment.",
-  },
-];
-
-export default function DonutChartPage() {
-  return (
-    <div className="min-h-screen bg-background pt-16">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <ComponentDoc
-          title="Donut Chart"
-          description="Ring-style charts with center content for hierarchical data and status displays."
-          code={code}
-          category="Charts"
-          dependencies={["lucide-react"]}
-          installCommand="npx linspo-ui add donut-chart"
-          props={props}
-        >
-          <div className="w-full max-w-xl">
-            <DonutChart data={sampleData} />
-          </div>
-        </ComponentDoc>
-      </div>
-    </div>
-  );
 }
+
+export default DonutChart;

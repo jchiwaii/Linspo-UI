@@ -1,19 +1,5 @@
 "use client";
 
-import { ComponentDoc } from "@/components/docs/ComponentDoc";
-import { BarChart } from "@/components/charts/bar-chart";
-
-const sampleData = [
-  { label: "Mobile", value: 65 },
-  { label: "Desktop", value: 85 },
-  { label: "Tablet", value: 45 },
-  { label: "Web App", value: 92 },
-  { label: "API", value: 78 },
-  { label: "Other", value: 56 },
-];
-
-const code = `"use client";
-
 import React, { useState, useEffect } from "react";
 import { TrendingUp, TrendingDown, BarChart3 } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -35,8 +21,17 @@ export interface BarChartProps {
   animated?: boolean;
 }
 
+const defaultData: BarChartDataPoint[] = [
+  { label: "Mobile", value: 65 },
+  { label: "Desktop", value: 85 },
+  { label: "Tablet", value: 45 },
+  { label: "Web App", value: 92 },
+  { label: "API", value: 78 },
+  { label: "Other", value: 56 },
+];
+
 export function BarChart({
-  data,
+  data = defaultData,
   className,
   title,
   showLabels = true,
@@ -82,13 +77,23 @@ export function BarChart({
         <div className="text-right">
           <p className="text-2xl font-semibold text-foreground font-mono">{average}%</p>
           {change !== undefined && (
-            <div className={cn(
-              "flex items-center justify-end gap-1 text-sm font-medium",
-              changeType === "increase" && "text-chart-2",
-              changeType === "decrease" && "text-destructive"
-            )}>
-              {changeType === "increase" ? <TrendingUp size={14} /> : <TrendingDown size={14} />}
-              <span>{change > 0 ? "+" : ""}{change}%</span>
+            <div
+              className={cn(
+                "flex items-center justify-end gap-1 text-sm font-medium",
+                changeType === "increase" && "text-chart-2",
+                changeType === "decrease" && "text-destructive",
+                changeType === "neutral" && "text-muted-foreground"
+              )}
+            >
+              {changeType === "increase" ? (
+                <TrendingUp size={14} />
+              ) : changeType === "decrease" ? (
+                <TrendingDown size={14} />
+              ) : null}
+              <span>
+                {change > 0 ? "+" : ""}
+                {change}%
+              </span>
             </div>
           )}
         </div>
@@ -109,16 +114,20 @@ export function BarChart({
             >
               {showLabels && (
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className={cn(
-                    "text-sm font-medium transition-colors",
-                    isHovered ? "text-foreground" : "text-muted-foreground"
-                  )}>
+                  <span
+                    className={cn(
+                      "text-sm font-medium transition-colors duration-200",
+                      isHovered ? "text-foreground" : "text-muted-foreground"
+                    )}
+                  >
                     {point.label}
                   </span>
-                  <span className={cn(
-                    "text-sm font-mono transition-all",
-                    isHovered ? "text-foreground font-semibold" : "text-muted-foreground"
-                  )}>
+                  <span
+                    className={cn(
+                      "text-sm font-mono transition-all duration-200",
+                      isHovered ? "text-foreground font-semibold" : "text-muted-foreground"
+                    )}
+                  >
                     {point.value}%
                   </span>
                 </div>
@@ -129,8 +138,11 @@ export function BarChart({
                     "absolute inset-y-0 left-0 rounded-lg transition-all duration-500 ease-out",
                     isHovered ? "bg-chart-1" : "bg-chart-1/80"
                   )}
-                  style={{ width: \`\${width}%\` }}
+                  style={{ width: `${width}%` }}
                 />
+                {isHovered && (
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent animate-pulse" />
+                )}
               </div>
             </div>
           );
@@ -156,80 +168,6 @@ export function BarChart({
       )}
     </div>
   );
-}`;
-
-const props = [
-  {
-    name: "data",
-    type: "BarChartDataPoint[]",
-    required: true,
-    description: "Array of data points with label and value properties.",
-  },
-  {
-    name: "className",
-    type: "string",
-    description: "Additional CSS classes to apply to the container.",
-  },
-  {
-    name: "title",
-    type: "string",
-    description: "Title displayed in the chart header.",
-  },
-  {
-    name: "metric",
-    type: "string",
-    default: '"User Engagement"',
-    description: "Label for the metric being displayed.",
-  },
-  {
-    name: "showLabels",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show labels for each bar.",
-  },
-  {
-    name: "showStats",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show the stats footer.",
-  },
-  {
-    name: "change",
-    type: "number",
-    description: "Percentage change to display in the header.",
-  },
-  {
-    name: "changeType",
-    type: '"increase" | "decrease" | "neutral"',
-    default: '"increase"',
-    description: "Type of change, affects the color of the indicator.",
-  },
-  {
-    name: "animated",
-    type: "boolean",
-    default: "true",
-    description: "Whether to animate the bars on mount.",
-  },
-];
-
-export default function BarChartPage() {
-  return (
-    <div className="min-h-screen bg-background pt-16">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <ComponentDoc
-          title="Bar Chart"
-          description="Interactive bar charts with smooth animations and hover effects for comparing categorical data."
-          code={code}
-          category="Charts"
-          dependencies={["lucide-react"]}
-          installCommand="npx linspo-ui add bar-chart"
-          props={props}
-        >
-          <div className="w-full max-w-lg">
-            <BarChart data={sampleData} change={8.2} />
-          </div>
-        </ComponentDoc>
-      </div>
-    </div>
-  );
 }
+
+export default BarChart;

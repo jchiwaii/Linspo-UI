@@ -1,17 +1,5 @@
 "use client";
 
-import { ComponentDoc } from "@/components/docs/ComponentDoc";
-import { PieChart } from "@/components/charts/pie-chart";
-
-const sampleData = [
-  { label: "Desktop", value: 45 },
-  { label: "Mobile", value: 30 },
-  { label: "Tablet", value: 15 },
-  { label: "Other", value: 10 },
-];
-
-const code = `"use client";
-
 import React, { useState } from "react";
 import { PieChart as PieChartIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -30,6 +18,13 @@ export interface PieChartProps {
   colors?: string[];
 }
 
+const defaultData: PieChartDataPoint[] = [
+  { label: "Desktop", value: 45 },
+  { label: "Mobile", value: 30 },
+  { label: "Tablet", value: 15 },
+  { label: "Other", value: 10 },
+];
+
 const defaultColors = [
   "hsl(221 83% 53%)",
   "hsl(160 60% 45%)",
@@ -39,7 +34,7 @@ const defaultColors = [
 ];
 
 export function PieChart({
-  data,
+  data = defaultData,
   className,
   title,
   metric = "Traffic Sources",
@@ -60,7 +55,7 @@ export function PieChart({
       y: 50 + outerRadius * Math.sin(endAngle - Math.PI / 2),
     };
     const largeArc = endAngle - startAngle > Math.PI ? 1 : 0;
-    return \`M 50 50 L \${startOuter.x} \${startOuter.y} A \${outerRadius} \${outerRadius} 0 \${largeArc} 1 \${endOuter.x} \${endOuter.y} Z\`;
+    return `M 50 50 L ${startOuter.x} ${startOuter.y} A ${outerRadius} ${outerRadius} 0 ${largeArc} 1 ${endOuter.x} ${endOuter.y} Z`;
   };
 
   let currentAngle = 0;
@@ -80,6 +75,7 @@ export function PieChart({
 
   return (
     <div className={cn("bg-card border border-border rounded-xl p-6", className)}>
+      {/* Header */}
       <div className="flex items-center gap-3 mb-8">
         <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
           <PieChartIcon size={20} className="text-chart-1" />
@@ -90,7 +86,13 @@ export function PieChart({
         </div>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-8 items-center">
+      <div
+        className={cn(
+          "gap-8 items-center",
+          showLegend ? "grid md:grid-cols-2" : "flex justify-center"
+        )}
+      >
+        {/* Pie Chart */}
         <div className="relative aspect-square max-w-[280px] mx-auto">
           <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
             {slices.map((slice, index) => {
@@ -104,6 +106,7 @@ export function PieChart({
                   stroke="hsl(var(--background))"
                   strokeWidth="1"
                   className="transition-all duration-200 cursor-pointer"
+                  style={{ opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1 }}
                   onMouseEnter={() => setHoveredSlice(index)}
                   onMouseLeave={() => setHoveredSlice(null)}
                 />
@@ -113,7 +116,7 @@ export function PieChart({
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="text-center">
               <p className="text-3xl font-semibold font-mono text-foreground">
-                {hoveredSlice !== null ? \`\${slices[hoveredSlice].percentage}%\` : total}
+                {hoveredSlice !== null ? `${slices[hoveredSlice].percentage}%` : total}
               </p>
               <p className="text-sm text-muted-foreground">
                 {hoveredSlice !== null ? slices[hoveredSlice].label : "Total"}
@@ -122,83 +125,42 @@ export function PieChart({
           </div>
         </div>
 
+        {/* Legend */}
         {showLegend && (
           <div className="space-y-3">
-            {slices.map((slice, index) => (
-              <div
-                key={index}
-                className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 cursor-pointer"
-                onMouseEnter={() => setHoveredSlice(index)}
-                onMouseLeave={() => setHoveredSlice(null)}
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-3 h-3 rounded-full" style={{ backgroundColor: slice.color }} />
-                  <span className="font-medium text-foreground">{slice.label}</span>
+            {slices.map((slice, index) => {
+              const isHovered = hoveredSlice === index;
+              return (
+                <div
+                  key={index}
+                  className={cn(
+                    "flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer",
+                    isHovered ? "bg-accent" : "hover:bg-accent/50"
+                  )}
+                  onMouseEnter={() => setHoveredSlice(index)}
+                  onMouseLeave={() => setHoveredSlice(null)}
+                >
+                  <div className="flex items-center gap-3">
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: slice.color }}
+                    />
+                    <span className="font-medium text-foreground">{slice.label}</span>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <span className="font-mono text-muted-foreground">{slice.value}</span>
+                    <span className="font-mono font-semibold text-foreground w-12 text-right">
+                      {slice.percentage}%
+                    </span>
+                  </div>
                 </div>
-                <span className="font-mono font-semibold text-foreground">{slice.percentage}%</span>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </div>
     </div>
   );
-}`;
-
-const props = [
-  {
-    name: "data",
-    type: "PieChartDataPoint[]",
-    required: true,
-    description: "Array of data points with label and value properties.",
-  },
-  {
-    name: "className",
-    type: "string",
-    description: "Additional CSS classes to apply to the container.",
-  },
-  {
-    name: "title",
-    type: "string",
-    description: "Title displayed in the chart header.",
-  },
-  {
-    name: "metric",
-    type: "string",
-    default: '"Traffic Sources"',
-    description: "Label for the metric being displayed.",
-  },
-  {
-    name: "showLegend",
-    type: "boolean",
-    default: "true",
-    description: "Whether to show the legend alongside the chart.",
-  },
-  {
-    name: "colors",
-    type: "string[]",
-    description: "Array of colors for each segment.",
-  },
-];
-
-export default function PieChartPage() {
-  return (
-    <div className="min-h-screen bg-background pt-16">
-      <div className="max-w-4xl mx-auto px-6 py-12">
-        <ComponentDoc
-          title="Pie Chart"
-          description="Circular charts showing proportional data and percentage breakdowns with smooth hover interactions."
-          code={code}
-          category="Charts"
-          dependencies={["lucide-react"]}
-          installCommand="npx linspo-ui add pie-chart"
-          props={props}
-        >
-          <div className="w-full max-w-xl">
-            <PieChart data={sampleData} />
-          </div>
-        </ComponentDoc>
-      </div>
-    </div>
-  );
 }
+
+export default PieChart;
