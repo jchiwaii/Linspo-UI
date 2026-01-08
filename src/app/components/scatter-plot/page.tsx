@@ -150,7 +150,8 @@ const props = [
   {
     name: "data",
     type: "DataPoint[]",
-    description: "Array of data points with x, y coordinates and optional label.",
+    description:
+      "Array of data points with x, y coordinates and optional label.",
   },
   {
     name: "metric",

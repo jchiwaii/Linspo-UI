@@ -96,7 +96,8 @@ const props = [
   {
     name: "metrics",
     type: "Metric[]",
-    description: "Array of metrics with id, value, label, icon, and optional change/suffix/description.",
+    description:
+      "Array of metrics with id, value, label, icon, and optional change/suffix/description.",
   },
   {
     name: "className",

@@ -138,7 +138,8 @@ const props = [
   {
     name: "data",
     type: "DataRow[]",
-    description: "Array of data rows with id, name, email, status, revenue, and date fields.",
+    description:
+      "Array of data rows with id, name, email, status, revenue, and date fields.",
   },
   {
     name: "className",

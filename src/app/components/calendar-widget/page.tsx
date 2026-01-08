@@ -147,7 +147,8 @@ const props = [
   {
     name: "events",
     type: "Event[]",
-    description: "Array of events with date, title, and optional type for color coding.",
+    description:
+      "Array of events with date, title, and optional type for color coding.",
   },
   {
     name: "className",
