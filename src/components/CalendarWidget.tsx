@@ -1,115 +1,178 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import ComponentPage from "./ComponentPage";
-
-interface Event {
-  date: Date;
-  title: string;
-  type?: "default" | "success" | "warning" | "danger";
-}
+import { cn } from "@/lib/utils";
 
 interface CalendarWidgetProps {
-  events?: Event[];
-  title?: string;
-  subtitle?: string;
+  initialDate?: Date;
+  events?: { date: Date; title: string; type: "meeting" | "deadline" | "reminder" }[];
+  className?: string;
 }
 
-const defaultEvents: Event[] = [
-  { date: new Date(2024, 11, 5), title: "Team Meeting", type: "default" },
-  { date: new Date(2024, 11, 10), title: "Product Launch", type: "success" },
-  { date: new Date(2024, 11, 15), title: "Deadline", type: "warning" },
-  { date: new Date(2024, 11, 20), title: "Review", type: "default" },
+const defaultEvents = [
+  { date: new Date(2024, 11, 15), title: "Team Meeting", type: "meeting" as const },
+  { date: new Date(2024, 11, 20), title: "Project Deadline", type: "deadline" as const },
+  { date: new Date(2024, 11, 25), title: "Holiday", type: "reminder" as const },
 ];
 
-const typeColors = { default: "bg-chart-1", success: "bg-chart-2", warning: "bg-chart-3", danger: "bg-chart-5" };
-
 export default function CalendarWidget({
+  initialDate = new Date(),
   events = defaultEvents,
-  title = "Calendar Widget",
-  subtitle = "Date-based data visualization and event timeline component with interactive navigation.",
+  className,
 }: CalendarWidgetProps) {
-  const [currentDate, setCurrentDate] = useState(new Date());
+  const [currentDate, setCurrentDate] = useState(initialDate);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  const year = currentDate.getFullYear();
-  const month = currentDate.getMonth();
-  const firstDay = new Date(year, month, 1).getDay();
-  const daysInMonth = new Date(year, month + 1, 0).getDate();
-  const today = new Date();
+  const getDaysInMonth = (date: Date) =>
+    new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+  const getFirstDayOfMonth = (date: Date) =>
+    new Date(date.getFullYear(), date.getMonth(), 1).getDay();
 
-  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+  const daysInMonth = getDaysInMonth(currentDate);
+  const firstDay = getFirstDayOfMonth(currentDate);
+  const days = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+  const blanks = Array.from({ length: firstDay }, (_, i) => i);
 
-  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
-  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+  const months = [
+    "January","February","March","April","May","June",
+    "July","August","September","October","November","December",
+  ];
 
-  const getEventsForDate = (day: number) => events.filter((e) => e.date.getFullYear() === year && e.date.getMonth() === month && e.date.getDate() === day);
-  const isToday = (day: number) => today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
+  const navigateMonth = (direction: number) => {
+    setCurrentDate(
+      new Date(currentDate.getFullYear(), currentDate.getMonth() + direction, 1)
+    );
+  };
+
+  const hasEvent = (day: number) => {
+    return events.some(
+      (event) =>
+        event.date.getDate() === day &&
+        event.date.getMonth() === currentDate.getMonth() &&
+        event.date.getFullYear() === currentDate.getFullYear()
+    );
+  };
+
+  const getEventType = (day: number) => {
+    const event = events.find(
+      (e) =>
+        e.date.getDate() === day &&
+        e.date.getMonth() === currentDate.getMonth() &&
+        e.date.getFullYear() === currentDate.getFullYear()
+    );
+    return event?.type;
+  };
+
+  const isToday = (day: number) => {
+    const today = new Date();
+    return (
+      day === today.getDate() &&
+      currentDate.getMonth() === today.getMonth() &&
+      currentDate.getFullYear() === today.getFullYear()
+    );
+  };
+
+  const eventColors = {
+    meeting: "bg-chart-1",
+    deadline: "bg-chart-2",
+    reminder: "bg-chart-3",
+  };
 
   return (
-    <ComponentPage title={title} subtitle={subtitle}>
-      <div className="bg-card border border-border rounded-xl shadow-sm">
-        <div className="flex items-center justify-between p-4 border-b border-border">
-          <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
-              <Calendar size={20} className="text-chart-1" />
-            </div>
-            <div>
-              <h3 className="font-semibold text-foreground">{monthNames[month]} {year}</h3>
-              <p className="text-sm text-muted-foreground">{events.length} events</p>
-            </div>
+    <div className={cn("bg-card border border-border rounded-xl p-6 shadow-sm", className)}>
+      <div className="flex items-center justify-between mb-6">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
+            <Calendar size={20} className="text-chart-1" />
           </div>
-          <div className="flex items-center gap-1">
-            <button onClick={prevMonth} className="w-9 h-9 rounded-lg border border-border hover:bg-accent flex items-center justify-center transition-colors"><ChevronLeft size={18} /></button>
-            <button onClick={nextMonth} className="w-9 h-9 rounded-lg border border-border hover:bg-accent flex items-center justify-center transition-colors"><ChevronRight size={18} /></button>
+          <div>
+            <h3 className="font-semibold text-foreground">
+              {months[currentDate.getMonth()]} {currentDate.getFullYear()}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {events.length} events this month
+            </p>
           </div>
         </div>
-
-        <div className="p-4">
-          <div className="grid grid-cols-7 mb-2">
-            {dayNames.map((day) => (<div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">{day}</div>))}
-          </div>
-
-          <div className="grid grid-cols-7 gap-1">
-            {Array.from({ length: firstDay }).map((_, index) => (<div key={`empty-${index}`} className="aspect-square" />))}
-
-            {Array.from({ length: daysInMonth }).map((_, index) => {
-              const day = index + 1;
-              const dayEvents = getEventsForDate(day);
-              const isTodayDate = isToday(day);
-
-              return (
-                <div key={day} className={`aspect-square p-1 rounded-lg cursor-pointer transition-colors hover:bg-accent ${isTodayDate ? "bg-primary/10 ring-1 ring-primary" : ""}`}>
-                  <div className="h-full flex flex-col">
-                    <span className={`text-sm ${isTodayDate ? "font-semibold text-primary" : "text-foreground"}`}>{day}</span>
-                    {dayEvents.length > 0 && (
-                      <div className="flex gap-0.5 mt-auto">
-                        {dayEvents.slice(0, 3).map((event, i) => (<div key={i} className={`w-1.5 h-1.5 rounded-full ${typeColors[event.type || "default"]}`} />))}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+        <div className="flex gap-2">
+          <button
+            onClick={() => navigateMonth(-1)}
+            className="p-2 rounded-lg hover:bg-muted transition-colors"
+          >
+            <ChevronLeft size={20} className="text-muted-foreground" />
+          </button>
+          <button
+            onClick={() => navigateMonth(1)}
+            className="p-2 rounded-lg hover:bg-muted transition-colors"
+          >
+            <ChevronRight size={20} className="text-muted-foreground" />
+          </button>
         </div>
+      </div>
 
-        <div className="p-4 border-t border-border">
-          <h4 className="text-sm font-medium text-foreground mb-3">Upcoming Events</h4>
-          <div className="space-y-2">
-            {events.slice(0, 3).map((event, index) => (
-              <div key={index} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50 transition-colors">
-                <div className={`w-2 h-2 rounded-full ${typeColors[event.type || "default"]}`} />
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-foreground">{event.title}</p>
-                  <p className="text-xs text-muted-foreground">{event.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}</p>
-                </div>
-              </div>
-            ))}
+      <div className="grid grid-cols-7 gap-1 mb-2">
+        {["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"].map((day) => (
+          <div
+            key={day}
+            className="text-center text-xs font-medium text-muted-foreground py-2"
+          >
+            {day}
+          </div>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-7 gap-1">
+        {blanks.map((_, index) => (
+          <div key={`blank-${index}`} className="aspect-square" />
+        ))}
+        {days.map((day) => (
+          <button
+            key={day}
+            onClick={() =>
+              setSelectedDate(
+                new Date(currentDate.getFullYear(), currentDate.getMonth(), day)
+              )
+            }
+            className={cn(
+              "aspect-square rounded-lg flex flex-col items-center justify-center text-sm relative transition-all",
+              isToday(day)
+                ? "bg-primary text-primary-foreground font-semibold"
+                : selectedDate?.getDate() === day &&
+                  selectedDate?.getMonth() === currentDate.getMonth()
+                ? "bg-muted text-foreground"
+                : "hover:bg-muted text-foreground"
+            )}
+          >
+            {day}
+            {hasEvent(day) && (
+              <div
+                className={cn(
+                  "w-1.5 h-1.5 rounded-full absolute bottom-1",
+                  eventColors[getEventType(day) || "reminder"]
+                )}
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div className="mt-6 pt-4 border-t border-border">
+        <div className="flex gap-4 text-xs">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-chart-1" />
+            <span className="text-muted-foreground">Meeting</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-chart-2" />
+            <span className="text-muted-foreground">Deadline</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-chart-3" />
+            <span className="text-muted-foreground">Reminder</span>
           </div>
         </div>
       </div>
-    </ComponentPage>
+    </div>
   );
 }

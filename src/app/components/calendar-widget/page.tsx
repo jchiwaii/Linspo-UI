@@ -1,187 +1,178 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Eye, Code2, Copy, Check } from "lucide-react";
+import { ComponentDoc } from "@/components/docs/ComponentDoc";
 import CalendarWidget from "@/components/CalendarWidget";
 
-export default function CalendarWidgetShowcasePage() {
-  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
-  const [copied, setCopied] = useState(false);
-  const [code, setCode] = useState<string>("");
+const code = `"use client";
 
-  const copyToClipboard = async () => {
-    try {
-      const response = await fetch("/api/components/calendar-widget-code");
-      const { code } = await response.json();
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy code:", err);
-    }
-  };
+import React, { useState } from "react";
+import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-  React.useEffect(() => {
-    if (activeTab === "code") {
-      fetch("/api/components/calendar-widget-code")
-        .then((res) => res.json())
-        .then(({ code }) => setCode(code))
-        .catch((err) => console.error("Failed to fetch code:", err));
-    }
-  }, [activeTab]);
+interface Event {
+  date: Date;
+  title: string;
+  type?: "default" | "success" | "warning" | "danger";
+}
+
+interface CalendarWidgetProps {
+  events?: Event[];
+  className?: string;
+}
+
+const defaultEvents: Event[] = [
+  { date: new Date(2024, 11, 5), title: "Team Meeting", type: "default" },
+  { date: new Date(2024, 11, 10), title: "Product Launch", type: "success" },
+  { date: new Date(2024, 11, 15), title: "Deadline", type: "warning" },
+  { date: new Date(2024, 11, 20), title: "Review", type: "default" },
+];
+
+const typeColors = {
+  default: "bg-chart-1",
+  success: "bg-chart-2",
+  warning: "bg-chart-3",
+  danger: "bg-chart-5",
+};
+
+export function CalendarWidget({
+  events = defaultEvents,
+  className,
+}: CalendarWidgetProps) {
+  const [currentDate, setCurrentDate] = useState(new Date());
+
+  const year = currentDate.getFullYear();
+  const month = currentDate.getMonth();
+  const firstDay = new Date(year, month, 1).getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  const today = new Date();
+
+  const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const dayNames = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+
+  const prevMonth = () => setCurrentDate(new Date(year, month - 1, 1));
+  const nextMonth = () => setCurrentDate(new Date(year, month + 1, 1));
+
+  const getEventsForDate = (day: number) => events.filter((e) =>
+    e.date.getFullYear() === year && e.date.getMonth() === month && e.date.getDate() === day
+  );
+  const isToday = (day: number) =>
+    today.getFullYear() === year && today.getMonth() === month && today.getDate() === day;
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"></div>
-
-      <div className="relative">
-        <div className="container mx-auto px-4 max-w-7xl py-12">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/components"
-                className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-300"
-              >
-                <ArrowLeft size={20} />
-                <span>Back to Components</span>
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setActiveTab("preview")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeTab === "preview"
-                    ? "bg-white text-black"
-                    : "bg-gray-800 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Eye size={16} />
-                <span>Preview</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("code")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeTab === "code"
-                    ? "bg-white text-black"
-                    : "bg-gray-800 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Code2 size={16} />
-                <span>Code</span>
-              </button>
-            </div>
+    <div className={cn("bg-card border border-border rounded-xl shadow-sm", className)}>
+      <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
+            <Calendar size={20} className="text-chart-1" />
           </div>
-
-          <div className="mb-12">
-            <h1 className="text-4xl font-light mb-4 bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
-              Calendar Widget
-            </h1>
-            <p className="text-gray-400 text-lg max-w-3xl">
-              Clean and minimal calendar component with event management.
-              Perfect for dashboards, scheduling applications, and productivity
-              tools.
-            </p>
-
-            <div className="flex flex-wrap gap-2 mt-4">
-              {[
-                "Calendar",
-                "Events",
-                "Widget",
-                "Scheduling",
-                "Productivity",
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-zinc-800/50 overflow-hidden">
-            {activeTab === "preview" ? (
-              <div className="p-8">
-                <div className="bg-white rounded-xl overflow-hidden">
-                  <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-xs text-gray-500 font-mono">
-                      preview.localhost:3000
-                    </span>
-                  </div>
-
-                  <div className="min-h-[600px] relative">
-                    <CalendarWidget />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="relative">
-                <div className="p-6">
-                  <div className="bg-zinc-900 rounded-xl border border-zinc-800">
-                    <div className="border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
-                      <span className="text-zinc-400 text-sm font-mono">
-                        CalendarWidget.tsx
-                      </span>
-                      <div className="flex items-center space-x-3">
-                        <span className="text-xs text-zinc-500">
-                          TypeScript + React + Tailwind CSS
-                        </span>
-                        <button
-                          onClick={copyToClipboard}
-                          className="flex items-center space-x-2 px-3 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-md text-sm font-medium transition-all duration-300 border border-zinc-700"
-                        >
-                          {copied ? <Check size={14} /> : <Copy size={14} />}
-                          <span className="text-xs">
-                            {copied ? "Copied!" : "Copy"}
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                      <pre className="p-4 text-sm leading-relaxed">
-                        <code className="language-typescript text-gray-300 whitespace-pre">
-                          {code || "Loading code..."}
-                        </code>
-                      </pre>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 space-y-6 text-zinc-400">
-                    <div>
-                      <h4 className="font-medium text-white mb-2">
-                        Installation
-                      </h4>
-                      <p>Install the required dependencies:</p>
-                      <pre className="mt-2 p-3 bg-zinc-900 rounded-lg text-sm border border-zinc-800">
-                        <code>npm install lucide-react</code>
-                      </pre>
-                    </div>
-
-                    <div>
-                      <h4 className="font-medium text-white mb-2">Features</h4>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>Interactive calendar with month navigation</li>
-                        <li>Event indicators and upcoming events list</li>
-                        <li>Responsive design with hover effects</li>
-                        <li>Customizable events and styling</li>
-                        <li>Date selection and event filtering</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div>
+            <h3 className="font-semibold text-foreground">{monthNames[month]} {year}</h3>
+            <p className="text-sm text-muted-foreground">{events.length} events</p>
           </div>
         </div>
+        <div className="flex items-center gap-1">
+          <button onClick={prevMonth} className="w-9 h-9 rounded-lg border border-border hover:bg-accent flex items-center justify-center transition-colors">
+            <ChevronLeft size={18} />
+          </button>
+          <button onClick={nextMonth} className="w-9 h-9 rounded-lg border border-border hover:bg-accent flex items-center justify-center transition-colors">
+            <ChevronRight size={18} />
+          </button>
+        </div>
+      </div>
+
+      <div className="p-4">
+        <div className="grid grid-cols-7 mb-2">
+          {dayNames.map((day) => (
+            <div key={day} className="text-center text-xs font-medium text-muted-foreground py-2">{day}</div>
+          ))}
+        </div>
+
+        <div className="grid grid-cols-7 gap-1">
+          {Array.from({ length: firstDay }).map((_, index) => (
+            <div key={\`empty-\${index}\`} className="aspect-square" />
+          ))}
+
+          {Array.from({ length: daysInMonth }).map((_, index) => {
+            const day = index + 1;
+            const dayEvents = getEventsForDate(day);
+            const isTodayDate = isToday(day);
+
+            return (
+              <div
+                key={day}
+                className={cn(
+                  "aspect-square p-1 rounded-lg cursor-pointer transition-colors hover:bg-accent",
+                  isTodayDate && "bg-primary/10 ring-1 ring-primary"
+                )}
+              >
+                <div className="h-full flex flex-col">
+                  <span className={cn("text-sm", isTodayDate ? "font-semibold text-primary" : "text-foreground")}>
+                    {day}
+                  </span>
+                  {dayEvents.length > 0 && (
+                    <div className="flex gap-0.5 mt-auto">
+                      {dayEvents.slice(0, 3).map((event, i) => (
+                        <div key={i} className={\`w-1.5 h-1.5 rounded-full \${typeColors[event.type || "default"]}\`} />
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="p-4 border-t border-border">
+        <h4 className="text-sm font-medium text-foreground mb-3">Upcoming Events</h4>
+        <div className="space-y-2">
+          {events.slice(0, 3).map((event, index) => (
+            <div key={index} className="flex items-center gap-3 p-2 rounded-lg hover:bg-accent/50 transition-colors">
+              <div className={\`w-2 h-2 rounded-full \${typeColors[event.type || "default"]}\`} />
+              <div className="flex-1">
+                <p className="text-sm font-medium text-foreground">{event.title}</p>
+                <p className="text-xs text-muted-foreground">
+                  {event.date.toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}`;
+
+const props = [
+  {
+    name: "events",
+    type: "Event[]",
+    description: "Array of events with date, title, and optional type for color coding.",
+  },
+  {
+    name: "className",
+    type: "string",
+    description: "Additional CSS classes to apply.",
+  },
+];
+
+export default function CalendarWidgetPage() {
+  return (
+    <div className="min-h-screen bg-background pt-16">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <ComponentDoc
+          title="Calendar Widget"
+          description="Date-based data visualization and event timeline component with interactive navigation, event indicators, and upcoming events list."
+          code={code}
+          category="Widgets"
+          dependencies={["lucide-react"]}
+          installCommand="npx linspo-ui add calendar-widget"
+          props={props}
+        >
+          <div className="w-full max-w-md">
+            <CalendarWidget />
+          </div>
+        </ComponentDoc>
       </div>
     </div>
   );

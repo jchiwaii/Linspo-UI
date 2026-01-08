@@ -1,86 +1,122 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
-import { DollarSign, Users, Target, Activity, ArrowUpRight, ArrowDownRight } from "lucide-react";
-import ComponentPage from "./ComponentPage";
+import React from "react";
+import { TrendingUp, TrendingDown, Activity, DollarSign, Users, ShoppingCart } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Metric {
-  id: string;
-  value: string | number;
   label: string;
-  description?: string;
-  icon: React.ReactNode;
-  suffix?: string;
-  change?: number;
-  changeType?: "increase" | "decrease" | "neutral";
+  value: string;
+  change: number;
+  icon: "revenue" | "users" | "orders" | "activity";
 }
 
 interface KeyMetricsProps {
   metrics?: Metric[];
   title?: string;
-  subtitle?: string;
+  className?: string;
 }
 
 const defaultMetrics: Metric[] = [
-  { id: "revenue", value: "847.2K", label: "Total Revenue", description: "Monthly recurring", icon: <DollarSign size={20} />, change: 23.5, changeType: "increase" },
-  { id: "conversion", value: "12.8", label: "Conversion Rate", description: "Lead to customer", icon: <Target size={20} />, suffix: "%", change: -2.1, changeType: "decrease" },
-  { id: "users", value: "24.7K", label: "Active Users", description: "Daily active", icon: <Users size={20} />, change: 15.3, changeType: "increase" },
-  { id: "performance", value: "98.7", label: "Uptime", description: "Service availability", icon: <Activity size={20} />, suffix: "%", change: 0.3, changeType: "increase" },
+  { label: "Total Revenue", value: "$84,532", change: 12.5, icon: "revenue" },
+  { label: "Active Users", value: "12,847", change: 8.3, icon: "users" },
+  { label: "Orders", value: "2,341", change: -3.2, icon: "orders" },
+  { label: "Conversion", value: "4.28%", change: 15.7, icon: "activity" },
 ];
+
+const iconMap = {
+  revenue: DollarSign,
+  users: Users,
+  orders: ShoppingCart,
+  activity: Activity,
+};
+
+const colorMap = {
+  revenue: "chart-1",
+  users: "chart-2",
+  orders: "chart-3",
+  activity: "chart-4",
+};
 
 export default function KeyMetrics({
   metrics = defaultMetrics,
   title = "Key Metrics",
-  subtitle = "Display important statistics and KPIs with animated counters and visual indicators.",
+  className,
 }: KeyMetricsProps) {
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => { setIsLoaded(true); }, []);
-
   return (
-    <ComponentPage title={title} subtitle={subtitle}>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {metrics.map((metric, index) => (
-          <div
-            key={metric.id}
-            className={`group bg-card border border-border rounded-xl p-5 hover:shadow-lg hover:border-border/80 transition-all duration-300 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"}`}
-            style={{ transitionDelay: `${index * 100}ms` }}
-          >
-            <div className="flex items-center justify-between mb-3">
-              <div className="w-9 h-9 rounded-lg bg-primary/10 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors duration-200">
-                {metric.icon}
-              </div>
-              {metric.change !== undefined && (
-                <div className={`flex items-center gap-0.5 text-xs font-medium ${metric.changeType === "increase" ? "text-chart-2" : metric.changeType === "decrease" ? "text-destructive" : "text-muted-foreground"}`}>
-                  {metric.changeType === "increase" ? <ArrowUpRight size={14} /> : metric.changeType === "decrease" ? <ArrowDownRight size={14} /> : null}
-                  <span>{metric.change > 0 ? "+" : ""}{metric.change}%</span>
-                </div>
-              )}
-            </div>
-            <div className="mb-1">
-              <span className="text-2xl font-semibold data-value text-foreground">{metric.value}</span>
-              {metric.suffix && <span className="text-lg text-muted-foreground ml-0.5">{metric.suffix}</span>}
-            </div>
-            <p className="text-sm font-medium text-foreground">{metric.label}</p>
-            {metric.description && <p className="text-xs text-muted-foreground mt-0.5">{metric.description}</p>}
-          </div>
-        ))}
+    <div className={cn("bg-card border border-border rounded-xl p-6 shadow-sm", className)}>
+      <div className="flex items-center gap-3 mb-6">
+        <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
+          <Activity size={20} className="text-chart-1" />
+        </div>
+        <div>
+          <h3 className="font-semibold text-foreground">{title}</h3>
+          <p className="text-sm text-muted-foreground">{metrics.length} metrics tracked</p>
+        </div>
       </div>
 
-      <div className="mt-8 grid grid-cols-3 gap-4">
-        <div className="bg-card border border-border rounded-xl p-4 text-center">
-          <p className="text-lg font-semibold data-value text-foreground">↗ 18.2%</p>
-          <p className="text-xs text-muted-foreground">Overall Growth</p>
-        </div>
-        <div className="bg-card border border-border rounded-xl p-4 text-center">
-          <p className="text-lg font-semibold data-value text-foreground">4.7/5</p>
-          <p className="text-xs text-muted-foreground">Performance Score</p>
-        </div>
-        <div className="bg-card border border-border rounded-xl p-4 text-center">
-          <p className="text-lg font-semibold data-value text-foreground">99.8%</p>
-          <p className="text-xs text-muted-foreground">Data Accuracy</p>
-        </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        {metrics.map((metric) => {
+          const Icon = iconMap[metric.icon];
+          const color = colorMap[metric.icon];
+
+          return (
+            <div
+              key={metric.label}
+              className="p-4 rounded-lg bg-muted/50 border border-border/50"
+            >
+              <div className="flex items-center justify-between mb-3">
+                <div
+                  className={cn(
+                    "w-9 h-9 rounded-lg flex items-center justify-center",
+                    `bg-${color}/10`
+                  )}
+                  style={{ backgroundColor: `hsl(var(--${color}) / 0.1)` }}
+                >
+                  <Icon size={18} className={`text-${color}`} style={{ color: `hsl(var(--${color}))` }} />
+                </div>
+                <div
+                  className={cn(
+                    "flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium",
+                    metric.change >= 0
+                      ? "bg-chart-3/10 text-chart-3"
+                      : "bg-chart-2/10 text-chart-2"
+                  )}
+                >
+                  {metric.change >= 0 ? (
+                    <TrendingUp size={12} />
+                  ) : (
+                    <TrendingDown size={12} />
+                  )}
+                  {Math.abs(metric.change)}%
+                </div>
+              </div>
+              <p className="text-2xl font-semibold font-mono text-foreground mb-1">
+                {metric.value}
+              </p>
+              <p className="text-sm text-muted-foreground">{metric.label}</p>
+            </div>
+          );
+        })}
       </div>
-    </ComponentPage>
+
+      <div className="mt-6 pt-4 border-t border-border flex items-center justify-between">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-chart-3" />
+            <span className="text-xs text-muted-foreground">
+              {metrics.filter((m) => m.change > 0).length} improving
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full bg-chart-2" />
+            <span className="text-xs text-muted-foreground">
+              {metrics.filter((m) => m.change < 0).length} declining
+            </span>
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground">Updated just now</p>
+      </div>
+    </div>
   );
 }

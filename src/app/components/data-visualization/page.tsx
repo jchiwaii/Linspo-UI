@@ -1,186 +1,169 @@
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { ArrowLeft, Eye, Code2, Copy, Check } from "lucide-react";
+import { ComponentDoc } from "@/components/docs/ComponentDoc";
 import DataVisualization from "@/components/DataVisualization";
 
-export default function DataVisualizationShowcasePage() {
-  const [activeTab, setActiveTab] = useState<"preview" | "code">("preview");
-  const [copied, setCopied] = useState(false);
-  const [code, setCode] = useState<string>("");
+const code = `"use client";
 
-  const copyToClipboard = async () => {
-    try {
-      const response = await fetch("/api/components/data-visualization-code");
-      const { code } = await response.json();
-      await navigator.clipboard.writeText(code);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
-    } catch (err) {
-      console.error("Failed to copy code:", err);
-    }
+import React, { useState } from "react";
+import { Table2, ChevronUp, ChevronDown, Search } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+interface DataRow {
+  id: number;
+  name: string;
+  email: string;
+  status: "Active" | "Inactive" | "Pending";
+  revenue: number;
+  date: string;
+}
+
+interface DataVisualizationProps {
+  data?: DataRow[];
+  className?: string;
+}
+
+const defaultData: DataRow[] = [
+  { id: 1, name: "Alice Johnson", email: "alice@example.com", status: "Active", revenue: 12450, date: "2024-01-15" },
+  { id: 2, name: "Bob Smith", email: "bob@example.com", status: "Active", revenue: 8920, date: "2024-01-14" },
+  { id: 3, name: "Carol Davis", email: "carol@example.com", status: "Pending", revenue: 15680, date: "2024-01-13" },
+  { id: 4, name: "David Wilson", email: "david@example.com", status: "Inactive", revenue: 5430, date: "2024-01-12" },
+  { id: 5, name: "Eva Martinez", email: "eva@example.com", status: "Active", revenue: 21350, date: "2024-01-11" },
+];
+
+const statusStyles = {
+  Active: "bg-chart-2/10 text-chart-2",
+  Inactive: "bg-muted text-muted-foreground",
+  Pending: "bg-chart-3/10 text-chart-3",
+};
+
+export function DataVisualization({ data = defaultData, className }: DataVisualizationProps) {
+  const [sortKey, setSortKey] = useState<keyof DataRow>("id");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("asc");
+  const [search, setSearch] = useState("");
+
+  const handleSort = (key: keyof DataRow) => {
+    if (sortKey === key) { setSortDir(sortDir === "asc" ? "desc" : "asc"); }
+    else { setSortKey(key); setSortDir("asc"); }
   };
 
-  React.useEffect(() => {
-    if (activeTab === "code") {
-      fetch("/api/components/data-visualization-code")
-        .then((res) => res.json())
-        .then(({ code }) => setCode(code))
-        .catch((err) => console.error("Failed to fetch code:", err));
-    }
-  }, [activeTab]);
+  const filteredData = data.filter((row) =>
+    row.name.toLowerCase().includes(search.toLowerCase()) ||
+    row.email.toLowerCase().includes(search.toLowerCase())
+  );
+
+  const sortedData = [...filteredData].sort((a, b) => {
+    const aVal = a[sortKey], bVal = b[sortKey];
+    if (typeof aVal === "string" && typeof bVal === "string")
+      return sortDir === "asc" ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
+    return sortDir === "asc" ? Number(aVal) - Number(bVal) : Number(bVal) - Number(aVal);
+  });
+
+  const SortIcon = ({ columnKey }: { columnKey: keyof DataRow }) => {
+    if (sortKey !== columnKey) return null;
+    return sortDir === "asc" ? <ChevronUp size={14} /> : <ChevronDown size={14} />;
+  };
 
   return (
-    <div className="min-h-screen bg-black text-white">
-      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:60px_60px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"></div>
-
-      <div className="relative">
-        <div className="container mx-auto px-4 max-w-7xl py-12">
-          <div className="flex items-center justify-between mb-8">
-            <div className="flex items-center space-x-4">
-              <Link
-                href="/components"
-                className="flex items-center space-x-2 text-gray-400 hover:text-white transition-colors duration-300"
-              >
-                <ArrowLeft size={20} />
-                <span>Back to Components</span>
-              </Link>
-            </div>
-
-            <div className="flex items-center space-x-3">
-              <button
-                onClick={() => setActiveTab("preview")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeTab === "preview"
-                    ? "bg-white text-black"
-                    : "bg-gray-800 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Eye size={16} />
-                <span>Preview</span>
-              </button>
-              <button
-                onClick={() => setActiveTab("code")}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 ${
-                  activeTab === "code"
-                    ? "bg-white text-black"
-                    : "bg-gray-800 text-gray-400 hover:text-white"
-                }`}
-              >
-                <Code2 size={16} />
-                <span>Code</span>
-              </button>
-            </div>
+    <div className={cn("bg-card border border-border rounded-xl shadow-sm overflow-hidden", className)}>
+      <div className="flex items-center justify-between p-4 border-b border-border">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-lg bg-chart-1/10 flex items-center justify-center">
+            <Table2 size={20} className="text-chart-1" />
           </div>
-
-          <div className="mb-12">
-            <h1 className="text-4xl font-light mb-4 bg-gradient-to-b from-white to-gray-400 bg-clip-text text-transparent">
-              Data Visualization
-            </h1>
-            <p className="text-gray-400 text-lg max-w-3xl">
-              Clean and modern charts and graphs with smooth animations. Perfect
-              for dashboards, analytics, and data-driven applications.
-            </p>
-
-            <div className="flex flex-wrap gap-2 mt-4">
-              {[
-                "Charts",
-                "Analytics",
-                "Dashboard",
-                "Data",
-                "Visualization",
-              ].map((tag) => (
-                <span
-                  key={tag}
-                  className="px-3 py-1 bg-gray-800 text-gray-300 text-sm rounded-full"
-                >
-                  {tag}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-zinc-900 to-black rounded-2xl border border-zinc-800/50 overflow-hidden">
-            {activeTab === "preview" ? (
-              <div className="p-8">
-                <div className="bg-white rounded-xl overflow-hidden">
-                  <div className="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                      <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                    </div>
-                    <span className="text-xs text-gray-500 font-mono">
-                      preview.localhost:3000
-                    </span>
-                  </div>
-
-                  <div className="min-h-[700px] relative">
-                    <DataVisualization />
-                  </div>
-                </div>
-              </div>
-            ) : (
-              <div className="relative">
-                <div className="p-6">
-                  <div className="bg-zinc-900 rounded-xl border border-zinc-800">
-                    <div className="border-b border-zinc-800 px-4 py-3 flex items-center justify-between">
-                      <span className="text-zinc-400 text-sm font-mono">
-                        DataVisualization.tsx
-                      </span>
-                      <div className="flex items-center space-x-3">
-                        <span className="text-xs text-zinc-500">
-                          TypeScript + React + Tailwind CSS
-                        </span>
-                        <button
-                          onClick={copyToClipboard}
-                          className="flex items-center space-x-2 px-3 py-1 bg-zinc-800 hover:bg-zinc-700 rounded-md text-sm font-medium transition-all duration-300 border border-zinc-700"
-                        >
-                          {copied ? <Check size={14} /> : <Copy size={14} />}
-                          <span className="text-xs">
-                            {copied ? "Copied!" : "Copy"}
-                          </span>
-                        </button>
-                      </div>
-                    </div>
-
-                    <div className="overflow-x-auto">
-                      <pre className="p-4 text-sm leading-relaxed">
-                        <code className="language-typescript text-gray-300 whitespace-pre">
-                          {code || "Loading code..."}
-                        </code>
-                      </pre>
-                    </div>
-                  </div>
-
-                  <div className="mt-8 space-y-6 text-zinc-400">
-                    <div>
-                      <h4 className="font-medium text-white mb-2">
-                        Installation
-                      </h4>
-                      <p>Install the required dependencies:</p>
-                      <pre className="mt-2 p-3 bg-zinc-900 rounded-lg text-sm border border-zinc-800">
-                        <code>npm install lucide-react</code>
-                      </pre>
-                    </div>
-
-                    <div>
-                      <h4 className="font-medium text-white mb-2">Features</h4>
-                      <ul className="list-disc list-inside space-y-1">
-                        <li>Animated bar and line charts</li>
-                        <li>Responsive design with hover effects</li>
-                        <li>Customizable data and styling</li>
-                        <li>Summary statistics cards</li>
-                        <li>Pure CSS animations for smooth performance</li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div>
+            <h3 className="font-semibold text-foreground">Users</h3>
+            <p className="text-sm text-muted-foreground">{filteredData.length} records</p>
           </div>
         </div>
+        <div className="relative">
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="pl-9 pr-4 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+          />
+        </div>
+      </div>
+
+      <div className="overflow-x-auto">
+        <table className="w-full">
+          <thead>
+            <tr className="border-b border-border bg-muted/30">
+              {[
+                { key: "name" as const, label: "Name" },
+                { key: "email" as const, label: "Email" },
+                { key: "status" as const, label: "Status" },
+                { key: "revenue" as const, label: "Revenue" },
+                { key: "date" as const, label: "Date" },
+              ].map(({ key, label }) => (
+                <th
+                  key={key}
+                  onClick={() => handleSort(key)}
+                  className="px-4 py-3 text-left text-xs font-medium text-muted-foreground uppercase tracking-wider cursor-pointer hover:text-foreground transition-colors"
+                >
+                  <div className="flex items-center gap-1">{label}<SortIcon columnKey={key} /></div>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sortedData.map((row) => (
+              <tr key={row.id} className="border-b border-border last:border-0 hover:bg-accent/50 transition-colors">
+                <td className="px-4 py-3"><span className="font-medium text-foreground">{row.name}</span></td>
+                <td className="px-4 py-3 text-muted-foreground">{row.email}</td>
+                <td className="px-4 py-3">
+                  <span className={\`px-2 py-0.5 rounded-full text-xs font-medium \${statusStyles[row.status]}\`}>
+                    {row.status}
+                  </span>
+                </td>
+                <td className="px-4 py-3"><span className="font-mono text-foreground">\${row.revenue.toLocaleString()}</span></td>
+                <td className="px-4 py-3 text-muted-foreground">{row.date}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="px-4 py-3 border-t border-border bg-muted/30">
+        <p className="text-sm text-muted-foreground">Showing {sortedData.length} of {data.length} entries</p>
+      </div>
+    </div>
+  );
+}`;
+
+const props = [
+  {
+    name: "data",
+    type: "DataRow[]",
+    description: "Array of data rows with id, name, email, status, revenue, and date fields.",
+  },
+  {
+    name: "className",
+    type: "string",
+    description: "Additional CSS classes to apply.",
+  },
+];
+
+export default function DataVisualizationPage() {
+  return (
+    <div className="min-h-screen bg-background pt-16">
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <ComponentDoc
+          title="Data Table"
+          description="Interactive data tables with sorting, filtering, search, and clean modern styling for displaying structured data."
+          code={code}
+          category="Widgets"
+          dependencies={["lucide-react"]}
+          installCommand="npx linspo-ui add data-table"
+          props={props}
+        >
+          <div className="w-full">
+            <DataVisualization />
+          </div>
+        </ComponentDoc>
       </div>
     </div>
   );
