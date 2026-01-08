@@ -41,7 +41,11 @@ export default function PieChart({
 
   const total = data.reduce((sum, d) => sum + d.value, 0);
 
-  const getSlicePath = (startAngle: number, endAngle: number, outerRadius: number) => {
+  const getSlicePath = (
+    startAngle: number,
+    endAngle: number,
+    outerRadius: number
+  ) => {
     const startOuter = {
       x: 50 + outerRadius * Math.cos(startAngle - Math.PI / 2),
       y: 50 + outerRadius * Math.sin(startAngle - Math.PI / 2),
@@ -78,13 +82,18 @@ export default function PieChart({
           </div>
           <div>
             <h3 className="font-semibold text-foreground">{metric}</h3>
-            <p className="text-sm text-muted-foreground">{data.length} segments</p>
+            <p className="text-sm text-muted-foreground">
+              {data.length} segments
+            </p>
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 items-center">
           <div className="relative aspect-square max-w-[280px] mx-auto">
-            <svg viewBox="0 0 100 100" className="w-full h-full transform -rotate-90">
+            <svg
+              viewBox="0 0 100 100"
+              className="w-full h-full transform -rotate-90"
+            >
               {slices.map((slice, index) => {
                 const isHovered = hoveredSlice === index;
                 const radius = isHovered ? 42 : 40;
@@ -96,7 +105,9 @@ export default function PieChart({
                     stroke="hsl(var(--background))"
                     strokeWidth="1"
                     className="transition-all duration-200 cursor-pointer"
-                    style={{ opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1 }}
+                    style={{
+                      opacity: hoveredSlice !== null && !isHovered ? 0.5 : 1,
+                    }}
                     onMouseEnter={() => setHoveredSlice(index)}
                     onMouseLeave={() => setHoveredSlice(null)}
                   />
@@ -106,7 +117,9 @@ export default function PieChart({
             <div className="absolute inset-0 flex items-center justify-center">
               <div className="text-center">
                 <p className="text-3xl font-semibold data-value text-foreground">
-                  {hoveredSlice !== null ? `${slices[hoveredSlice].percentage}%` : total}
+                  {hoveredSlice !== null
+                    ? `${slices[hoveredSlice].percentage}%`
+                    : total}
                 </p>
                 <p className="text-sm text-muted-foreground">
                   {hoveredSlice !== null ? slices[hoveredSlice].label : "Total"}
@@ -121,17 +134,28 @@ export default function PieChart({
               return (
                 <div
                   key={index}
-                  className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${isHovered ? "bg-accent" : "hover:bg-accent/50"}`}
+                  className={`flex items-center justify-between p-3 rounded-lg transition-all duration-200 cursor-pointer ${
+                    isHovered ? "bg-accent" : "hover:bg-accent/50"
+                  }`}
                   onMouseEnter={() => setHoveredSlice(index)}
                   onMouseLeave={() => setHoveredSlice(null)}
                 >
                   <div className="flex items-center gap-3">
-                    <div className="w-3 h-3 rounded-full" style={{ backgroundColor: slice.color }} />
-                    <span className="font-medium text-foreground">{slice.label}</span>
+                    <div
+                      className="w-3 h-3 rounded-full"
+                      style={{ backgroundColor: slice.color }}
+                    />
+                    <span className="font-medium text-foreground">
+                      {slice.label}
+                    </span>
                   </div>
                   <div className="flex items-center gap-4">
-                    <span className="data-value text-muted-foreground">{slice.value}</span>
-                    <span className="data-value font-semibold text-foreground w-12 text-right">{slice.percentage}%</span>
+                    <span className="data-value text-muted-foreground">
+                      {slice.value}
+                    </span>
+                    <span className="data-value font-semibold text-foreground w-12 text-right">
+                      {slice.percentage}%
+                    </span>
                   </div>
                 </div>
               );

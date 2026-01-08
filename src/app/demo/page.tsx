@@ -49,7 +49,12 @@ export default function DemoPage() {
   const minLine = Math.min(...lineChartData);
   const rangeLine = maxLine - minLine || 1;
   const linePoints = lineChartData
-    .map((v, i) => `${(i / (lineChartData.length - 1)) * 100},${100 - ((v - minLine) / rangeLine) * 80 - 10}`)
+    .map(
+      (v, i) =>
+        `${(i / (lineChartData.length - 1)) * 100},${
+          100 - ((v - minLine) / rangeLine) * 80 - 10
+        }`
+    )
     .join(" ");
   const areaPoints = `0,100 ${linePoints} 100,100`;
 
@@ -88,31 +93,61 @@ export default function DemoPage() {
           {/* Header */}
           <div className="mb-10">
             <h1
-              className={`text-4xl font-semibold text-foreground mb-3 transition-all duration-500 ${isLoaded ? "opacity-100" : "opacity-0"
-                }`}
+              className={`text-4xl font-semibold text-foreground mb-3 transition-all duration-500 ${
+                isLoaded ? "opacity-100" : "opacity-0"
+              }`}
             >
               Dashboard Demo
             </h1>
             <p
-              className={`text-lg text-muted-foreground transition-all duration-500 delay-100 ${isLoaded ? "opacity-100" : "opacity-0"
-                }`}
+              className={`text-lg text-muted-foreground transition-all duration-500 delay-100 ${
+                isLoaded ? "opacity-100" : "opacity-0"
+              }`}
             >
-              A showcase of all Linspo UI components working together in a cohesive dashboard.
+              A showcase of all Linspo UI components working together in a
+              cohesive dashboard.
             </p>
           </div>
 
           {/* Metrics Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
             {[
-              { label: "Total Revenue", value: "$847.2K", change: 23.5, type: "increase", icon: <DollarSign size={20} /> },
-              { label: "Active Users", value: "24.7K", change: 15.3, type: "increase", icon: <Users size={20} /> },
-              { label: "Conversion", value: "12.8%", change: -2.1, type: "decrease", icon: <Target size={20} /> },
-              { label: "Uptime", value: "99.8%", change: 0.3, type: "increase", icon: <Activity size={20} /> },
+              {
+                label: "Total Revenue",
+                value: "$847.2K",
+                change: 23.5,
+                type: "increase",
+                icon: <DollarSign size={20} />,
+              },
+              {
+                label: "Active Users",
+                value: "24.7K",
+                change: 15.3,
+                type: "increase",
+                icon: <Users size={20} />,
+              },
+              {
+                label: "Conversion",
+                value: "12.8%",
+                change: -2.1,
+                type: "decrease",
+                icon: <Target size={20} />,
+              },
+              {
+                label: "Uptime",
+                value: "99.8%",
+                change: 0.3,
+                type: "increase",
+                icon: <Activity size={20} />,
+              },
             ].map((metric, index) => (
               <div
                 key={index}
-                className={`group bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-all duration-300 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                  }`}
+                className={`group bg-card border border-border rounded-xl p-5 hover:shadow-lg transition-all duration-300 ${
+                  isLoaded
+                    ? "opacity-100 translate-y-0"
+                    : "opacity-0 translate-y-4"
+                }`}
                 style={{ transitionDelay: `${index * 50 + 100}ms` }}
               >
                 <div className="flex items-center justify-between mb-3">
@@ -120,14 +155,26 @@ export default function DemoPage() {
                     {metric.icon}
                   </div>
                   <div
-                    className={`flex items-center gap-0.5 text-xs font-medium ${metric.type === "increase" ? "text-chart-2" : "text-destructive"
-                      }`}
+                    className={`flex items-center gap-0.5 text-xs font-medium ${
+                      metric.type === "increase"
+                        ? "text-chart-2"
+                        : "text-destructive"
+                    }`}
                   >
-                    {metric.type === "increase" ? <ArrowUpRight size={14} /> : <ArrowDownRight size={14} />}
-                    <span>{metric.change > 0 ? "+" : ""}{metric.change}%</span>
+                    {metric.type === "increase" ? (
+                      <ArrowUpRight size={14} />
+                    ) : (
+                      <ArrowDownRight size={14} />
+                    )}
+                    <span>
+                      {metric.change > 0 ? "+" : ""}
+                      {metric.change}%
+                    </span>
                   </div>
                 </div>
-                <p className="text-2xl font-semibold data-value text-foreground mb-1">{metric.value}</p>
+                <p className="text-2xl font-semibold data-value text-foreground mb-1">
+                  {metric.value}
+                </p>
                 <p className="text-sm text-muted-foreground">{metric.label}</p>
               </div>
             ))}
@@ -137,8 +184,11 @@ export default function DemoPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
             {/* Line Chart */}
             <div
-              className={`lg:col-span-2 bg-card border border-border rounded-xl p-6 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`lg:col-span-2 bg-card border border-border rounded-xl p-6 transition-all duration-500 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
               style={{ transitionDelay: "300ms" }}
             >
               <div className="flex items-center justify-between mb-6">
@@ -147,12 +197,18 @@ export default function DemoPage() {
                     <TrendingUp size={20} className="text-chart-1" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-foreground">Revenue Trend</h3>
-                    <p className="text-sm text-muted-foreground">Last 12 months</p>
+                    <h3 className="font-semibold text-foreground">
+                      Revenue Trend
+                    </h3>
+                    <p className="text-sm text-muted-foreground">
+                      Last 12 months
+                    </p>
                   </div>
                 </div>
                 <div className="text-right">
-                  <p className="text-xl font-semibold data-value text-foreground">$105K</p>
+                  <p className="text-xl font-semibold data-value text-foreground">
+                    $105K
+                  </p>
                   <p className="text-sm text-chart-2 flex items-center gap-1 justify-end">
                     <TrendingUp size={14} />
                     +18.2%
@@ -161,28 +217,66 @@ export default function DemoPage() {
               </div>
 
               <div className="h-48 relative">
-                <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+                <svg
+                  className="w-full h-full"
+                  viewBox="0 0 100 100"
+                  preserveAspectRatio="none"
+                >
                   {/* Grid */}
                   {[0, 25, 50, 75, 100].map((y) => (
-                    <line key={y} x1="0" y1={y} x2="100" y2={y} stroke="currentColor" strokeWidth="0.3" strokeDasharray="2,2" className="text-border" />
+                    <line
+                      key={y}
+                      x1="0"
+                      y1={y}
+                      x2="100"
+                      y2={y}
+                      stroke="currentColor"
+                      strokeWidth="0.3"
+                      strokeDasharray="2,2"
+                      className="text-border"
+                    />
                   ))}
                   {/* Gradient */}
                   <defs>
-                    <linearGradient id="demoAreaGrad" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stopColor="hsl(221 83% 53%)" stopOpacity="0.3" />
-                      <stop offset="100%" stopColor="hsl(221 83% 53%)" stopOpacity="0" />
+                    <linearGradient
+                      id="demoAreaGrad"
+                      x1="0"
+                      y1="0"
+                      x2="0"
+                      y2="1"
+                    >
+                      <stop
+                        offset="0%"
+                        stopColor="hsl(221 83% 53%)"
+                        stopOpacity="0.3"
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="hsl(221 83% 53%)"
+                        stopOpacity="0"
+                      />
                     </linearGradient>
                   </defs>
                   <polygon fill="url(#demoAreaGrad)" points={areaPoints} />
-                  <polyline fill="none" stroke="hsl(221 83% 53%)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" points={linePoints} />
+                  <polyline
+                    fill="none"
+                    stroke="hsl(221 83% 53%)"
+                    strokeWidth="2"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    points={linePoints}
+                  />
                 </svg>
               </div>
             </div>
 
             {/* Pie Chart */}
             <div
-              className={`bg-card border border-border rounded-xl p-6 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`bg-card border border-border rounded-xl p-6 transition-all duration-500 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
               style={{ transitionDelay: "400ms" }}
             >
               <div className="flex items-center gap-3 mb-6">
@@ -190,7 +284,9 @@ export default function DemoPage() {
                   <Activity size={20} className="text-chart-1" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Traffic Sources</h3>
+                  <h3 className="font-semibold text-foreground">
+                    Traffic Sources
+                  </h3>
                   <p className="text-sm text-muted-foreground">By device</p>
                 </div>
               </div>
@@ -198,7 +294,13 @@ export default function DemoPage() {
               <div className="relative w-32 h-32 mx-auto mb-6">
                 <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
                   {pieSlices.map((slice, i) => (
-                    <path key={i} d={slice.path} fill={slice.color} stroke="hsl(var(--background))" strokeWidth="1" />
+                    <path
+                      key={i}
+                      d={slice.path}
+                      fill={slice.color}
+                      stroke="hsl(var(--background))"
+                      strokeWidth="1"
+                    />
                   ))}
                 </svg>
               </div>
@@ -207,10 +309,17 @@ export default function DemoPage() {
                 {pieSlices.map((slice, i) => (
                   <div key={i} className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: slice.color }} />
-                      <span className="text-sm text-foreground">{slice.label}</span>
+                      <div
+                        className="w-2.5 h-2.5 rounded-full"
+                        style={{ backgroundColor: slice.color }}
+                      />
+                      <span className="text-sm text-foreground">
+                        {slice.label}
+                      </span>
                     </div>
-                    <span className="text-sm data-value text-muted-foreground">{slice.percentage}%</span>
+                    <span className="text-sm data-value text-muted-foreground">
+                      {slice.percentage}%
+                    </span>
                   </div>
                 ))}
               </div>
@@ -221,8 +330,11 @@ export default function DemoPage() {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {/* Bar Chart */}
             <div
-              className={`bg-card border border-border rounded-xl p-6 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`bg-card border border-border rounded-xl p-6 transition-all duration-500 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
               style={{ transitionDelay: "500ms" }}
             >
               <div className="flex items-center gap-3 mb-6">
@@ -230,8 +342,12 @@ export default function DemoPage() {
                   <BarChart3 size={20} className="text-chart-2" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Monthly Performance</h3>
-                  <p className="text-sm text-muted-foreground">First half of year</p>
+                  <h3 className="font-semibold text-foreground">
+                    Monthly Performance
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    First half of year
+                  </p>
                 </div>
               </div>
 
@@ -240,7 +356,9 @@ export default function DemoPage() {
                   <div key={i}>
                     <div className="flex items-center justify-between mb-1 text-sm">
                       <span className="text-muted-foreground">{d.label}</span>
-                      <span className="data-value text-foreground">{d.value}%</span>
+                      <span className="data-value text-foreground">
+                        {d.value}%
+                      </span>
                     </div>
                     <div className="h-6 bg-muted rounded-md overflow-hidden">
                       <div
@@ -255,8 +373,11 @@ export default function DemoPage() {
 
             {/* Recent Transactions */}
             <div
-              className={`bg-card border border-border rounded-xl p-6 transition-all duration-500 ${isLoaded ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
-                }`}
+              className={`bg-card border border-border rounded-xl p-6 transition-all duration-500 ${
+                isLoaded
+                  ? "opacity-100 translate-y-0"
+                  : "opacity-0 translate-y-4"
+              }`}
               style={{ transitionDelay: "600ms" }}
             >
               <div className="flex items-center gap-3 mb-6">
@@ -264,19 +385,34 @@ export default function DemoPage() {
                   <DollarSign size={20} className="text-chart-4" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground">Recent Transactions</h3>
-                  <p className="text-sm text-muted-foreground">Latest activity</p>
+                  <h3 className="font-semibold text-foreground">
+                    Recent Transactions
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Latest activity
+                  </p>
                 </div>
               </div>
 
               <div className="space-y-3">
                 {recentTransactions.map((tx, i) => (
-                  <div key={i} className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 transition-colors">
+                  <div
+                    key={i}
+                    className="flex items-center justify-between p-3 rounded-lg hover:bg-accent/50 transition-colors"
+                  >
                     <div>
                       <p className="font-medium text-foreground">{tx.name}</p>
-                      <p className="text-xs text-muted-foreground capitalize">{tx.status}</p>
+                      <p className="text-xs text-muted-foreground capitalize">
+                        {tx.status}
+                      </p>
                     </div>
-                    <span className={`data-value font-semibold ${tx.status === "completed" ? "text-chart-2" : "text-chart-3"}`}>
+                    <span
+                      className={`data-value font-semibold ${
+                        tx.status === "completed"
+                          ? "text-chart-2"
+                          : "text-chart-3"
+                      }`}
+                    >
                       +${tx.amount.toLocaleString()}
                     </span>
                   </div>
@@ -296,7 +432,8 @@ export default function DemoPage() {
               <span className="font-medium">Linspo UI</span>
             </div>
             <p className="text-sm text-muted-foreground">
-              Toggle the theme using the button above to see dark mode in action.
+              Toggle the theme using the button above to see dark mode in
+              action.
             </p>
           </div>
         </div>
