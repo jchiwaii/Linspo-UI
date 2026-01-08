@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { PieChart as PieChartIcon } from "lucide-react";
 import ComponentPage from "./ComponentPage";
 
