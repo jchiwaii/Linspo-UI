@@ -7,9 +7,9 @@ import {
   RadialGaugeCard,
   ScatterClusterCard,
   StackedBarsCard,
-  TrendLineCard,
   type VizCardBaseProps,
 } from "@/components/library/chart-cards";
+import { LineChartKitBoard } from "@/components/library/line-kit";
 
 export interface ChartPropDefinition {
   name: string;
@@ -50,33 +50,37 @@ export const chartLibrary: ChartComponentItem[] = [
   {
     slug: "line-chart",
     name: "Line Chart",
-    summary: "High-fidelity trend line with ambient area glow.",
+    summary: "Full dark line-chart UI kit inspired by your concept board.",
     description:
-      "A clean trajectory chart for momentum metrics. Designed for change-over-time storytelling with strong emphasis on the current point.",
+      "A complete line-chart concept system with multiple card variants: overall performance, sales report, compact metric cards, multi-line comparisons, area blends, and radial line composition.",
     category: "Trend",
-    tags: ["trend", "timeseries", "sparkline"],
+    tags: ["trend", "timeseries", "line-kit"],
     install: "npm install lucide-react",
-    usage: `import { TrendLineCard } from "@/components/library/chart-cards";
+    usage: `import {
+  LineChartKitBoard,
+  LineOverallPerformanceCard,
+  LineSalesReportCard,
+} from "@/components/library/line-kit";
 
-export function RevenueModule() {
-  return <TrendLineCard />;
+export function LineChartsShowcase() {
+  return (
+    <div className="space-y-4">
+      <LineSalesReportCard />
+      <LineOverallPerformanceCard />
+      <LineChartKitBoard />
+    </div>
+  );
 }`,
     props: [
       ...sharedProps,
       {
-        name: "data",
-        type: "number[]",
-        defaultValue: "[36, 42, 39, 51, 49, 58, 55, 66, 63, 74]",
-        description: "Series values rendered as the primary line.",
-      },
-      {
-        name: "labels",
-        type: "string[]",
-        defaultValue: "['W1' ... 'W10']",
-        description: "Axis labels rendered in the footer strip.",
+        name: "compact",
+        type: "boolean",
+        defaultValue: "false",
+        description: "Renders a single compact line card for catalog usage.",
       },
     ],
-    component: TrendLineCard,
+    component: LineChartKitBoard,
   },
   {
     slug: "area-chart",
