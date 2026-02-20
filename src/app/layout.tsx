@@ -3,9 +3,9 @@ import ConditionalNavbar from "@/components/ConditionalNavbar";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Linspo UI - Open Source Visualization Components",
+  title: "Linspo UI · Chart Component Library",
   description:
-    "Linspo UI — elegant, open-source web visualization components for dashboards and data apps.",
+    "A chart-only UI library for React and Next.js. Clean, minimal, and copy-paste friendly data visualization components.",
 };
 
 export default function RootLayout({

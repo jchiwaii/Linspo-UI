@@ -1,6 +1,5 @@
-import React from "react";
-import DataDashboardHero from "@/components/Hero";
+import LibraryLanding from "@/components/library/landing";
 
 export default function Home() {
-  return <DataDashboardHero />;
+  return <LibraryLanding />;
 }

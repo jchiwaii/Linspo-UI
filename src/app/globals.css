@@ -1,24 +1,14 @@
 @import "tailwindcss";
-@import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Syne:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap");
 
 @custom-variant dark (&:is(.dark *));
 
-/* ============================================
-   LINSPO UI - Design System Tokens
-   A data visualization component library
-   ============================================ */
-
 @theme inline {
-  /* Core Colors */
+  --font-sans: "Syne", "Avenir Next", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", "SFMono-Regular", ui-monospace, monospace;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-
-  /* Typography - Optimized for data visualization */
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
-  --font-display: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, monospace;
-
-  /* Component Colors */
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
@@ -31,155 +21,68 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
   --color-border: var(--border);
-  --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
 
-  /* Chart Colors - Colorblind-friendly palette */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-chart-6: var(--chart-6);
 
-  /* Sidebar */
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-
-  /* Border Radius */
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-sm: calc(var(--radius) - 6px);
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-xl: calc(var(--radius) + 6px);
 }
 
-/* ============================================
-   Light Mode - Clean whites, subtle borders
-   ============================================ */
 :root {
-  --radius: 0.625rem;
+  --radius: 1rem;
 
-  /* Backgrounds */
-  --background: hsl(0 0% 100%);
-  --foreground: hsl(224 71% 4%);
+  --background: hsl(226 43% 7%);
+  --foreground: hsl(214 54% 96%);
 
-  /* Cards & Popovers */
-  --card: hsl(0 0% 100%);
-  --card-foreground: hsl(224 71% 4%);
-  --popover: hsl(0 0% 100%);
-  --popover-foreground: hsl(224 71% 4%);
+  --card: hsl(226 36% 11%);
+  --card-foreground: hsl(214 54% 96%);
 
-  /* Primary - Soft slate blue */
-  --primary: hsl(222 47% 11%);
-  --primary-foreground: hsl(210 40% 98%);
+  --popover: hsl(226 33% 13%);
+  --popover-foreground: hsl(214 54% 96%);
 
-  /* Secondary */
-  --secondary: hsl(220 14% 96%);
-  --secondary-foreground: hsl(222 47% 11%);
+  --primary: hsl(186 96% 62%);
+  --primary-foreground: hsl(228 53% 7%);
 
-  /* Muted */
-  --muted: hsl(220 14% 96%);
-  --muted-foreground: hsl(220 9% 46%);
+  --secondary: hsl(20 92% 60%);
+  --secondary-foreground: hsl(225 50% 9%);
 
-  /* Accent */
-  --accent: hsl(220 14% 96%);
-  --accent-foreground: hsl(222 47% 11%);
+  --muted: hsl(226 26% 18%);
+  --muted-foreground: hsl(219 18% 74%);
 
-  /* Destructive */
-  --destructive: hsl(0 84% 60%);
+  --accent: hsl(204 100% 76%);
+  --accent-foreground: hsl(223 43% 12%);
 
-  /* Borders & Inputs - Subtle, low-contrast */
-  --border: hsl(220 13% 91%);
-  --input: hsl(220 13% 91%);
-  --ring: hsl(224 71% 4%);
+  --destructive: hsl(3 78% 61%);
 
-  /* Chart Colors - Muted, sophisticated palette */
-  --chart-1: hsl(221 83% 53%);
-  --chart-2: hsl(160 60% 45%);
-  --chart-3: hsl(30 80% 55%);
-  --chart-4: hsl(280 65% 60%);
-  --chart-5: hsl(340 75% 55%);
+  --border: hsl(225 23% 26%);
+  --ring: hsl(186 96% 62%);
 
-  /* Sidebar */
-  --sidebar: hsl(0 0% 98%);
-  --sidebar-foreground: hsl(224 71% 4%);
-  --sidebar-primary: hsl(222 47% 11%);
-  --sidebar-primary-foreground: hsl(210 40% 98%);
-  --sidebar-accent: hsl(220 14% 96%);
-  --sidebar-accent-foreground: hsl(222 47% 11%);
-  --sidebar-border: hsl(220 13% 91%);
-  --sidebar-ring: hsl(224 71% 4%);
+  --chart-1: hsl(186 96% 62%);
+  --chart-2: hsl(33 100% 59%);
+  --chart-3: hsl(152 70% 58%);
+  --chart-4: hsl(351 92% 71%);
+  --chart-5: hsl(214 100% 74%);
+  --chart-6: hsl(281 91% 76%);
 }
 
-/* ============================================
-   Dark Mode - Deep charcoal, not pure black
-   ============================================ */
-.dark {
-  /* Backgrounds - Deep charcoal */
-  --background: hsl(224 71% 4%);
-  --foreground: hsl(210 40% 98%);
-
-  /* Cards & Popovers */
-  --card: hsl(224 71% 4%);
-  --card-foreground: hsl(210 40% 98%);
-  --popover: hsl(224 71% 4%);
-  --popover-foreground: hsl(210 40% 98%);
-
-  /* Primary */
-  --primary: hsl(210 40% 98%);
-  --primary-foreground: hsl(222 47% 11%);
-
-  /* Secondary */
-  --secondary: hsl(217 33% 17%);
-  --secondary-foreground: hsl(210 40% 98%);
-
-  /* Muted */
-  --muted: hsl(217 33% 17%);
-  --muted-foreground: hsl(215 20% 65%);
-
-  /* Accent */
-  --accent: hsl(217 33% 17%);
-  --accent-foreground: hsl(210 40% 98%);
-
-  /* Destructive */
-  --destructive: hsl(0 62% 50%);
-
-  /* Borders & Inputs */
-  --border: hsl(217 33% 17%);
-  --input: hsl(217 33% 17%);
-  --ring: hsl(212 26% 83%);
-
-  /* Chart Colors - Slightly muted for dark backgrounds */
-  --chart-1: hsl(221 83% 63%);
-  --chart-2: hsl(160 60% 50%);
-  --chart-3: hsl(30 80% 60%);
-  --chart-4: hsl(280 65% 65%);
-  --chart-5: hsl(340 75% 60%);
-
-  /* Sidebar */
-  --sidebar: hsl(224 71% 4%);
-  --sidebar-foreground: hsl(210 40% 98%);
-  --sidebar-primary: hsl(221 83% 63%);
-  --sidebar-primary-foreground: hsl(210 40% 98%);
-  --sidebar-accent: hsl(217 33% 17%);
-  --sidebar-accent-foreground: hsl(210 40% 98%);
-  --sidebar-border: hsl(217 33% 17%);
-  --sidebar-ring: hsl(212 26% 83%);
-}
-
-/* ============================================
-   Base Styles
-   ============================================ */
 @layer base {
   * {
     @apply border-border;
+  }
+
+  html,
+  body {
+    min-height: 100%;
   }
 
   html {
@@ -188,312 +91,132 @@
 
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: "DM Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    font-family: var(--font-sans);
+    background-image: radial-gradient(
+        circle at 12% 18%,
+        hsl(187 99% 63% / 0.13),
+        transparent 34%
+      ),
+      radial-gradient(circle at 88% 8%, hsl(29 96% 61% / 0.16), transparent 31%),
+      radial-gradient(circle at 50% 88%, hsl(218 96% 70% / 0.11), transparent 37%),
+      linear-gradient(180deg, hsl(226 43% 7%) 0%, hsl(230 37% 8%) 100%);
   }
 
-  /* Use Space Grotesk for headings */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-  }
-
-  /* Smooth theme transitions */
-  html.transitioning,
-  html.transitioning *,
-  html.transitioning *::before,
-  html.transitioning *::after {
-    transition: background-color 300ms ease-out, border-color 300ms ease-out,
-      color 200ms ease-out !important;
+    font-family: var(--font-sans);
+    letter-spacing: -0.03em;
+    font-weight: 800;
   }
 }
 
-/* ============================================
-   Typography Utilities
-   ============================================ */
-.font-display {
-  font-family: "Space Grotesk", ui-sans-serif, system-ui, sans-serif;
-}
-
-.font-mono {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-}
-
-.text-balance {
-  text-wrap: balance;
-}
-
-/* Data values - use monospace for better alignment */
-.data-value {
-  font-family: "JetBrains Mono", ui-monospace, monospace;
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.025em;
-}
-
-/* ============================================
-   Animation Utilities
-   ============================================ */
-@keyframes fade-in {
+@keyframes rise-in {
   from {
     opacity: 0;
+    transform: translateY(18px) scale(0.98);
   }
 
   to {
     opacity: 1;
+    transform: translateY(0) scale(1);
   }
 }
 
-@keyframes fade-in-up {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes fade-in-down {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes scale-in {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes slide-in-right {
-  from {
-    opacity: 0;
-    transform: translateX(10px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateX(0);
-  }
-}
-
-@keyframes pulse-subtle {
+@keyframes float-drift {
   0%,
   100% {
-    opacity: 1;
+    transform: translateY(0px);
   }
 
   50% {
-    opacity: 0.7;
+    transform: translateY(-8px);
   }
 }
 
-@keyframes shimmer {
-  0% {
+@keyframes shimmer-scan {
+  from {
     background-position: -200% 0;
   }
 
-  100% {
+  to {
     background-position: 200% 0;
   }
 }
 
-/* Animation Classes - Quick and snappy (200-300ms) */
-.animate-fade-in {
-  animation: fade-in 200ms ease-out forwards;
+@keyframes pulse-ring {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 hsl(186 96% 62% / 0.22);
+  }
+
+  50% {
+    box-shadow: 0 0 0 14px hsl(186 96% 62% / 0);
+  }
 }
 
-.animate-fade-in-up {
-  animation: fade-in-up 250ms ease-out forwards;
-}
-
-.animate-fade-in-down {
-  animation: fade-in-down 250ms ease-out forwards;
-}
-
-.animate-scale-in {
-  animation: scale-in 200ms ease-out forwards;
-}
-
-.animate-slide-in-right {
-  animation: slide-in-right 250ms ease-out forwards;
-}
-
-.animate-pulse-subtle {
-  animation: pulse-subtle 2s ease-in-out infinite;
-}
-
-.animate-shimmer {
+.surface-panel {
   background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
+    155deg,
+    hsl(226 33% 13% / 0.92) 0%,
+    hsl(228 30% 12% / 0.87) 45%,
+    hsl(230 28% 11% / 0.85) 100%
   );
-  background-size: 200% 100%;
-  animation: shimmer 1.5s infinite;
+  border: 1px solid hsl(224 23% 28% / 0.72);
+  box-shadow: inset 0 1px 0 hsl(216 100% 97% / 0.03),
+    0 20px 45px hsl(226 46% 3% / 0.4);
 }
 
-/* Animation Delays */
-.animation-delay-100 {
-  animation-delay: 100ms;
+.numeric {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
 }
 
-.animation-delay-200 {
-  animation-delay: 200ms;
-}
-
-.animation-delay-300 {
-  animation-delay: 300ms;
-}
-
-.animation-delay-400 {
-  animation-delay: 400ms;
-}
-
-.animation-delay-500 {
-  animation-delay: 500ms;
-}
-
-/* Stagger children animations */
-.stagger-children > *:nth-child(1) {
-  animation-delay: 0ms;
-}
-
-.stagger-children > *:nth-child(2) {
-  animation-delay: 50ms;
-}
-
-.stagger-children > *:nth-child(3) {
-  animation-delay: 100ms;
-}
-
-.stagger-children > *:nth-child(4) {
-  animation-delay: 150ms;
-}
-
-.stagger-children > *:nth-child(5) {
-  animation-delay: 200ms;
-}
-
-.stagger-children > *:nth-child(6) {
-  animation-delay: 250ms;
-}
-
-/* ============================================
-   Chart & Data Visualization Utilities
-   ============================================ */
-
-/* Subtle grid pattern for chart backgrounds */
-.chart-grid {
+.aurora-grid {
   background-image: linear-gradient(
       to right,
-      var(--border) 1px,
+      hsl(223 23% 27% / 0.45) 1px,
       transparent 1px
     ),
-    linear-gradient(to bottom, var(--border) 1px, transparent 1px);
-  background-size: 40px 40px;
+    linear-gradient(to bottom, hsl(223 23% 27% / 0.45) 1px, transparent 1px);
+  background-size: 28px 28px;
 }
 
-/* Chart tooltip styling */
-.chart-tooltip {
-  @apply bg-popover text-popover-foreground border border-border rounded-lg shadow-lg;
-  @apply px-3 py-2 text-sm;
+.reveal {
+  opacity: 0;
+  animation: rise-in 620ms cubic-bezier(0.2, 0.65, 0.2, 1) forwards;
 }
 
-/* Data point hover effect */
-.data-point {
-  transition: transform 150ms ease-out, opacity 150ms ease-out;
+.floaty {
+  animation: float-drift 5s ease-in-out infinite;
 }
 
-.data-point:hover {
-  transform: scale(1.2);
+.shimmer-strip {
+  background: linear-gradient(
+    90deg,
+    transparent,
+    hsl(186 96% 62% / 0.2),
+    transparent
+  );
+  background-size: 220% 100%;
+  animation: shimmer-scan 2.1s linear infinite;
 }
 
-/* ============================================
-   Card & Surface Utilities
-   ============================================ */
-
-/* Subtle elevation */
-.elevation-1 {
-  box-shadow: 0 1px 3px 0 rgb(0 0 0 / 0.05), 0 1px 2px -1px rgb(0 0 0 / 0.05);
+.pulse-ring {
+  animation: pulse-ring 2.2s ease-out infinite;
 }
 
-.elevation-2 {
-  box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
-}
-
-.elevation-3 {
-  box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.05),
-    0 4px 6px -4px rgb(0 0 0 / 0.05);
-}
-
-/* Glass effect */
-.glass {
-  @apply bg-background/80 backdrop-blur-sm border border-border/50;
-}
-
-.glass-dark {
-  @apply bg-background/60 backdrop-blur-md border border-border/30;
-}
-
-/* ============================================
-   Interactive States
-   ============================================ */
-
-/* Subtle hover brightness */
-.hover-lift {
-  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
-}
-
-.hover-lift:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 25px -5px rgb(0 0 0 / 0.1),
-    0 8px 10px -6px rgb(0 0 0 / 0.05);
-}
-
-/* Focus ring */
-.focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background;
-}
-
-/* Button base styles */
-.btn {
-  @apply inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-lg text-sm font-medium;
-  @apply transition-all duration-200 ease-out;
-  @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
-  @apply disabled:pointer-events-none disabled:opacity-50;
-}
-
-.btn-primary {
-  @apply bg-primary text-primary-foreground hover:bg-primary/90;
-}
-
-.btn-secondary {
-  @apply bg-secondary text-secondary-foreground hover:bg-secondary/80;
-}
-
-.btn-ghost {
-  @apply hover:bg-accent hover:text-accent-foreground;
-}
-
-.btn-outline {
-  @apply border border-input bg-background hover:bg-accent hover:text-accent-foreground;
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
 }

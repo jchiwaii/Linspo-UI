@@ -1,154 +1,100 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
 import Link from "next/link";
-import { BarChart3, Moon, Sun, Github, Menu, X } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { BarChart3, Menu, X } from "lucide-react";
+import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-interface NavbarProps {
-  currentPage?: string;
-  className?: string;
-}
-
-const navLinks = [
-  { href: "/components", label: "Components", id: "components" },
-  { href: "/demo", label: "Demo", id: "demo" },
+const links = [
+  { href: "/", label: "Home" },
+  { href: "/components", label: "Components" },
+  { href: "/demo", label: "Demo" },
 ];
 
-export default function Navbar({ currentPage, className = "" }: NavbarProps) {
-  const [isDark, setIsDark] = useState(false);
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    // Check system preference and stored preference
-    const stored = localStorage.getItem("theme");
-    const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
-    ).matches;
-    const shouldBeDark = stored === "dark" || (!stored && prefersDark);
-
-    setIsDark(shouldBeDark);
-    if (shouldBeDark) {
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
-
-  const toggleTheme = () => {
-    const html = document.documentElement;
-    html.classList.add("transitioning");
-
-    if (isDark) {
-      html.classList.remove("dark");
-      localStorage.setItem("theme", "light");
-    } else {
-      html.classList.add("dark");
-      localStorage.setItem("theme", "dark");
-    }
-
-    setIsDark(!isDark);
-    setTimeout(() => html.classList.remove("transitioning"), 300);
-  };
+export default function Navbar() {
+  const pathname = usePathname();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <nav
-      className={cn(
-        "fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/80 backdrop-blur-xl",
-        className
-      )}
-    >
-      <div className="container mx-auto px-4 max-w-7xl">
-        <div className="flex items-center justify-between h-16">
-          {/* Logo */}
-          <Link
-            href="/"
-            className="flex items-center gap-2.5 font-semibold text-foreground hover:opacity-80 transition-opacity"
-          >
-            <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center">
-              <BarChart3 size={18} className="text-primary-foreground" />
-            </div>
-            <span className="text-lg">Linspo UI</span>
-          </Link>
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-border/80 bg-background/80 backdrop-blur-xl">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
+        <Link href="/" className="flex items-center gap-2">
+          <span className="flex h-9 w-9 items-center justify-center rounded-lg border border-chart-1/40 bg-chart-1/15 text-chart-1">
+            <BarChart3 className="h-4.5 w-4.5" />
+          </span>
+          <div>
+            <p className="text-sm font-bold leading-none text-foreground">Linspo UI</p>
+            <p className="numeric text-[10px] uppercase tracking-[0.14em] text-muted-foreground">Data Viz Library</p>
+          </div>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-1">
-            {navLinks.map((link) => (
+        <nav className="hidden items-center gap-1 md:flex">
+          {links.map((link) => {
+            const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+
+            return (
               <Link
-                key={link.id}
+                key={link.href}
                 href={link.href}
                 className={cn(
-                  "px-3 py-2 text-sm rounded-md transition-colors",
-                  currentPage === link.id
-                    ? "text-foreground font-medium bg-accent"
-                    : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                  "numeric rounded-full border px-3 py-1.5 text-xs uppercase tracking-[0.11em] transition",
+                  isActive
+                    ? "border-chart-1/65 bg-chart-1/15 text-chart-1"
+                    : "border-transparent text-muted-foreground hover:border-border hover:bg-card/60 hover:text-foreground"
                 )}
               >
                 {link.label}
               </Link>
-            ))}
-          </div>
+            );
+          })}
+        </nav>
 
-          {/* Right side actions */}
-          <div className="flex items-center gap-2">
-            <a
-              href="https://github.com/jchiwaii/Linspo-UI"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="hidden sm:flex w-9 h-9 items-center justify-center rounded-lg text-muted-foreground hover:text-foreground hover:bg-accent transition-colors"
-              aria-label="GitHub"
-            >
-              <Github size={20} />
-            </a>
-            <button
-              onClick={toggleTheme}
-              className="w-9 h-9 rounded-lg border border-border bg-background hover:bg-accent flex items-center justify-center transition-colors"
-              aria-label="Toggle theme"
-            >
-              {isDark ? <Sun size={18} /> : <Moon size={18} />}
-            </button>
+        <div className="flex items-center gap-2">
+          <a
+            href="https://github.com/jchiwaii/Linspo-UI"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="numeric hidden rounded-full border border-border/70 bg-card/60 px-3 py-1.5 text-[11px] uppercase tracking-[0.11em] text-muted-foreground transition hover:text-foreground md:inline-flex"
+          >
+            GitHub
+          </a>
 
-            {/* Mobile menu button */}
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden w-9 h-9 rounded-lg hover:bg-accent flex items-center justify-center transition-colors"
-              aria-label="Toggle menu"
-            >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => setMenuOpen((previous) => !previous)}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-md border border-border bg-card/60 text-muted-foreground md:hidden"
+            aria-label="Toggle menu"
+          >
+            {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
+      </div>
 
-        {/* Mobile Navigation */}
-        {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border py-4">
-            <div className="flex flex-col gap-1">
-              {navLinks.map((link) => (
+      {menuOpen ? (
+        <div className="border-t border-border/80 bg-card/80 px-4 py-3 md:hidden">
+          <nav className="flex flex-col gap-2">
+            {links.map((link) => {
+              const isActive = pathname === link.href || (link.href !== "/" && pathname.startsWith(link.href));
+              return (
                 <Link
-                  key={link.id}
+                  key={link.href}
                   href={link.href}
-                  onClick={() => setMobileMenuOpen(false)}
+                  onClick={() => setMenuOpen(false)}
                   className={cn(
-                    "px-3 py-2 text-sm rounded-md transition-colors",
-                    currentPage === link.id
-                      ? "text-foreground font-medium bg-accent"
-                      : "text-muted-foreground hover:text-foreground hover:bg-accent/50"
+                    "numeric rounded-md border px-3 py-2 text-xs uppercase tracking-[0.1em]",
+                    isActive
+                      ? "border-chart-1/60 bg-chart-1/15 text-chart-1"
+                      : "border-border/60 bg-background/65 text-muted-foreground"
                   )}
                 >
                   {link.label}
                 </Link>
-              ))}
-              <a
-                href="https://github.com/jchiwaii/Linspo-UI"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-3 py-2 text-sm text-muted-foreground hover:text-foreground rounded-md hover:bg-accent/50 transition-colors flex items-center gap-2"
-              >
-                <Github size={16} />
-                GitHub
-              </a>
-            </div>
-          </div>
-        )}
-      </div>
-    </nav>
+              );
+            })}
+          </nav>
+        </div>
+      ) : null}
+    </header>
   );
 }
