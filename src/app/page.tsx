@@ -1,5 +1,5 @@
-import LibraryLanding from "@/components/library/landing";
+import LandingPage from "@/components/landing";
 
 export default function Home() {
-  return <LibraryLanding />;
+  return <LandingPage />;
 }
